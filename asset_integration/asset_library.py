@@ -2,7 +2,6 @@
 
 # <pep8-80 compliant>
 
-import bpy
 import pathlib
 
 import logging
@@ -28,7 +27,7 @@ def ensure() -> None:
     asset_lib.path = str(ASSETS_PATH)
 
 
-def add_menu_objects_collections_get() -> dict:
+def get_all_libraries() -> dict:
     """
     Returns a nested dictionary with all the assets
     """
@@ -85,30 +84,89 @@ def add_menu_objects_collections_get() -> dict:
         {
             'Parametric': {
                 'Cone': {
-                    'filepath': "/home/dfelinto/Documents/projects/2022/node-tools/assets-integration-prototype/repositories/Parametric Primitives/Parametric Primitives.blend",
+                    'filepath': "Parametric Primitives/Parametric Primitives.blend",
                     'type': 'OBJECT',
                 },
                 'Cube': {
-                    'filepath': "/home/dfelinto/Documents/projects/2022/node-tools/assets-integration-prototype/repositories/Parametric Primitives/Parametric Primitives.blend",
+                    'filepath': "Parametric Primitives/Parametric Primitives.blend",
                     'type': 'OBJECT',
                 },
                 'Cylinder': {
-                    'filepath': "/home/dfelinto/Documents/projects/2022/node-tools/assets-integration-prototype/repositories/Parametric Primitives/Parametric Primitives.blend",
+                    'filepath': "Parametric Primitives/Parametric Primitives.blend",
                     'type': 'OBJECT',
                 },
                 'Grid': {
-                    'filepath': "/home/dfelinto/Documents/projects/2022/node-tools/assets-integration-prototype/repositories/Parametric Primitives/Parametric Primitives.blend",
+                    'filepath': "Parametric Primitives/Parametric Primitives.blend",
                     'type': 'OBJECT',
                 },
                 'Icosphere': {
-                    'filepath': "/home/dfelinto/Documents/projects/2022/node-tools/assets-integration-prototype/repositories/Parametric Primitives/Parametric Primitives.blend",
+                    'filepath': "Parametric Primitives/Parametric Primitives.blend",
                     'type': 'OBJECT',
                 },
                 'UV Sphere': {
-                    'filepath': "/home/dfelinto/Documents/projects/2022/node-tools/assets-integration-prototype/repositories/Parametric Primitives/Parametric Primitives.blend",
+                    'filepath': "Parametric Primitives/Parametric Primitives.blend",
                     'type': 'OBJECT',
                 },
             },
+        }
+    }
+    library_hair_operators = {
+        'Noise':
+        {
+            'Hair Noise': {
+                'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+                'type': 'NODE_TREE',
+                'subtype': 'GEOMETRY_NODES',
+                'is_modifier': False,
+                'is_node': False,
+                'is_operator': True,
+            },
+            'Hair Noise Proximity': {
+                'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+                'type': 'NODE_TREE',
+                'subtype': 'GEOMETRY_NODES',
+                'is_modifier': False,
+                'is_node': False,
+                'is_operator': True,
+            },
+        },
+        'Utilities':
+        {
+            'Delete Hair': {
+                'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+                'type': 'NODE_TREE',
+                'subtype': 'GEOMETRY_NODES',
+                'is_modifier': False,
+                'is_node': False,
+                'is_operator': True,
+            },
+            'Hair Thickness': {
+                'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+                'type': 'NODE_TREE',
+                'subtype': 'GEOMETRY_NODES',
+                'is_modifier': False,
+                'is_node': False,
+                'is_operator': True,
+            },
+            'Resample': {
+                'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+                'type': 'NODE_TREE',
+                'subtype': 'GEOMETRY_NODES',
+                'is_modifier': False,
+                'is_node': False,
+                'is_operator': True,
+            }
+        },
+        'Unassigned':
+        {
+            'Randomize Length': {
+                'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+                'type': 'NODE_TREE',
+                'subtype': 'GEOMETRY_NODES',
+                'is_modifier': False,
+                'is_node': False,
+                'is_operator': True,
+            }
         }
     }
 
@@ -116,8 +174,50 @@ def add_menu_objects_collections_get() -> dict:
         library_furniture,
         library_human_basemesh,
         library_parametric_primitives,
+        library_hair_operators,
     ))
     return library_merged
+
+
+def passed_rules_filter(element: dict, rules: dict) -> bool:
+    """
+    Return true if element passes rules filter.
+    """
+    for key in rules.keys():
+        value = element.get(key)
+        if not value:
+            return False
+
+        rules_values = rules[key]
+        if hasattr(rules_values, '__iter__'):
+            if value not in rules_values:
+                return False
+        elif value != rules_values:
+            return False
+    return True
+
+
+def filter_dictionary(catalog_dict: dict, rules: dict) -> dict:
+    filtered_sub_dictionary = {}
+
+    for key in catalog_dict.keys():
+        value = catalog_dict.get(key)
+        is_catalog = not value.get('type')
+
+        if not is_catalog:
+            if passed_rules_filter(value, rules):
+                filtered_sub_dictionary[key] = value
+        else:
+            sub_dict = filter_dictionary(value, rules)
+            if sub_dict:
+                filtered_sub_dictionary[key] = sub_dict
+
+    return filtered_sub_dictionary
+
+
+def add_menu_objects_collections_get() -> dict:
+    all_libraries = get_all_libraries()
+    return filter_dictionary(all_libraries, {'type': {'OBJECT', 'COLLECTION'}})
 
 
 def merge_dict_recursive(dict_final: dict, dict_iter: dict):
