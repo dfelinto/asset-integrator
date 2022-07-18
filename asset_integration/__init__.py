@@ -1,10 +1,14 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
+__version__ = '0.1.0'
+
+
 from . import (
     asset_library,
+    ui,
 )
-from mathutils import Vector
-from bpy_extras.object_utils import AddObjectHelper, object_data_add
+
+from bpy_extras.object_utils import AddObjectHelper
 from bpy.props import FloatVectorProperty
 from bpy.types import Operator
 
@@ -46,7 +50,7 @@ def setup_asset_library(dummy):
         workspace.asset_library_ref = asset_library.ASSET_LIBRARY_NAME
 
 
-class OBJECT_OT_add_object(Operator, AddObjectHelper):
+class OBJECT_OT_add_object(Operator):
     """Create a new Mesh Object"""
     bl_idname = "mesh.add_object"
     bl_label = "Add Mesh Object"
@@ -65,20 +69,10 @@ class OBJECT_OT_add_object(Operator, AddObjectHelper):
 
 
 # Registration
-
 def add_object_button(self, context):
     self.layout.operator(
         OBJECT_OT_add_object.bl_idname,
         text="Add Object")
-
-
-# This allows you to right click on a button and link to documentation
-def add_object_manual_map():
-    url_manual_prefix = "https://docs.blender.org/manual/en/latest/"
-    url_manual_mapping = (
-        ("bpy.ops.mesh.add_object", "scene_layout/object/types.html"),
-    )
-    return url_manual_prefix, url_manual_mapping
 
 
 def register():
@@ -88,8 +82,9 @@ def register():
     bpy.app.handlers.load_post.append(setup_user_preferences)
     bpy.app.handlers.load_post.append(setup_asset_library)
 
+    ui.register()
+
     bpy.utils.register_class(OBJECT_OT_add_object)
-    bpy.utils.register_manual_map(add_object_manual_map)
     bpy.types.VIEW3D_MT_mesh_add.append(add_object_button)
 
 
@@ -97,8 +92,9 @@ def unregister():
     bpy.app.handlers.load_post.remove(setup_user_preferences)
     bpy.app.handlers.load_post.remove(setup_asset_library)
 
+    ui.unregister()
+
     bpy.utils.unregister_class(OBJECT_OT_add_object)
-    bpy.utils.unregister_manual_map(add_object_manual_map)
     bpy.types.VIEW3D_MT_mesh_add.remove(add_object_button)
 
 

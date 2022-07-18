@@ -6,7 +6,5 @@
 
 VERSION 1
 
-7ad4efc5-64a3-4bf8-b542-14fab41fe8f5:Furniture:Furniture
-415810a3-2d37-4981-81cb-02d89e446351:Mesh:Mesh
-540cf355-1f08-4b71-909c-acf22d092242:Mesh/Human Basemesh:Mesh-Human Basemesh
-e272791e-c4a8-4e8a-b20b-7adc6e97af48:Mesh/Parametric:Mesh-Parametric
+372d0d4b-154e-40a5-8fe9-6c013c9268c9:Noise:Noise
+f624cf7d-af8c-4abf-81f7-c980922b99d6:Utilities:Utilities
