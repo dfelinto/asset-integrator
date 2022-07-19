@@ -123,6 +123,14 @@ def add_menu_geometry_nodes_get() -> dict:
                                  'is_node': True,
                              })
 
+def operator_tools_curves_geometry_nodes_get() -> dict:
+    all_libraries = get_all_libraries()
+    return filter_dictionary(all_libraries,
+                             {
+                                 'type': 'NODE_TREE',
+                                 'subtype': 'GEOMETRY_NODES',
+                                 'is_operator': True,
+                             })
 
 def merge_dict_recursive(dict_final: dict, dict_iter: dict):
     """

@@ -7,6 +7,7 @@ from .asset_library import (
     get_asset_filepath,
     is_catalog,
     is_asset,
+    operator_tools_curves_geometry_nodes_get,
 )
 
 from .operator import (
@@ -127,11 +128,24 @@ def populate_geometry_nodes_add_menu():
         bpy.types.NODE_MT_category_GEO_GROUP,
         bpy.types.NODE_MT_category_GEO_LAYOUT,
     )
-    menus_lookup = {menu.bl_label: menu for menu in menus}
-
     content = add_menu_geometry_nodes_get()
     populate_menu(menus, bpy.types.NODE_MT_add,
                   content, NODES_OT_add_asset_node.bl_idname)
+
+
+def populate_geometry_nodes_tools():
+    """
+    Populate the Geometry Nodes general tools.
+    """
+    menus = (
+        bpy.types.VIEW3D_MT_view,
+        bpy.types.VIEW3D_MT_select_sculpt_curves,
+        bpy.types.VIEW3D_MT_sculpt_curves,
+    )
+    content = operator_tools_curves_geometry_nodes_get()
+    populate_menu(menus, bpy.types.VIEW3D_MT_editor_menus,
+                  content, NODES_OT_add_asset_node.bl_idname)
+    # operator to add them
 
 
 CONTEXT_ID = "dynamic_menu_id"
@@ -195,6 +209,7 @@ def register():
     bpy.utils.register_class(ASSET_MT_DynamicMenu)
     populate_object_add_menu()
     populate_geometry_nodes_add_menu()
+    populate_geometry_nodes_tools()
 
 
 def unregister():
