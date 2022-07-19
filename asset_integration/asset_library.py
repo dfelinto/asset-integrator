@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 ASSET_LIBRARY_NAME = "Blender Bundle"
 BASE_PATH = pathlib.Path(__file__).parent.absolute()
-ASSETS_PATH = BASE_PATH / "repositories"
+ASSETS_PATH = BASE_PATH / "asset_libraries"
 
 
 def ensure() -> None:
