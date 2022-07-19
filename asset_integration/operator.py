@@ -60,8 +60,29 @@ class NODES_OT_asset_operator(bpy.types.Operator):
     id_name: bpy.props.StringProperty(name="ID Name")
 
     def execute(self, context):
-        # TODO actual implementation (call other script)
-        print(self.filepath)
+        node_groups_before = [node_group for node_group in bpy.data.node_groups]
+
+        file_path = self.filepath
+        inner_path = 'NodeTree'
+        asset_name = self.id_name
+
+        bpy.ops.wm.append(
+            filepath=os.path.join(file_path, inner_path, asset_name),
+            directory=os.path.join(file_path, inner_path),
+            filename=asset_name
+            )
+
+        node_groups_after = [node_group for node_group in bpy.data.node_groups]
+        if len(node_groups_before) != len(node_groups_after):
+            node_group = [node_group for node_group in node_groups_after if node_group not in node_groups_before][0]
+        else:
+            node_group = bpy.data.node_groups.get(self.id_name)
+
+        # TODO new operator to run node_group (from Jacques Lucke)
+
+        # Cleanup the file afterwards
+        bpy.data.node_groups.remove(node_group)
+
         return {'FINISHED'}
 
 
