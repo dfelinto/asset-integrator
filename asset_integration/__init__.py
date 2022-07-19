@@ -5,6 +5,7 @@ __version__ = '0.1.0'
 
 from . import (
     asset_library,
+    operator,
     ui,
 )
 
@@ -50,31 +51,6 @@ def setup_asset_library(dummy):
         workspace.asset_library_ref = asset_library.ASSET_LIBRARY_NAME
 
 
-class OBJECT_OT_add_object(Operator):
-    """Create a new Mesh Object"""
-    bl_idname = "mesh.add_object"
-    bl_label = "Add Mesh Object"
-    bl_options = {'REGISTER', 'UNDO'}
-
-    scale: FloatVectorProperty(
-        name="scale",
-        default=(1.0, 1.0, 1.0),
-        subtype='TRANSLATION',
-        description="scaling",
-    )
-
-    def execute(self, context):
-        pass
-        return {'FINISHED'}
-
-
-# Registration
-def add_object_button(self, context):
-    self.layout.operator(
-        OBJECT_OT_add_object.bl_idname,
-        text="Add Object")
-
-
 def register():
     import logging
     logging.basicConfig(level=logging.DEBUG)
@@ -82,20 +58,16 @@ def register():
     bpy.app.handlers.load_post.append(setup_user_preferences)
     bpy.app.handlers.load_post.append(setup_asset_library)
 
+    operator.register()
     ui.register()
-
-    bpy.utils.register_class(OBJECT_OT_add_object)
-    bpy.types.VIEW3D_MT_mesh_add.append(add_object_button)
 
 
 def unregister():
     bpy.app.handlers.load_post.remove(setup_user_preferences)
     bpy.app.handlers.load_post.remove(setup_asset_library)
 
+    operator.unregister()
     ui.unregister()
-
-    bpy.utils.unregister_class(OBJECT_OT_add_object)
-    bpy.types.VIEW3D_MT_mesh_add.remove(add_object_button)
 
 
 if __name__ == "__main__":

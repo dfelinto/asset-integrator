@@ -29,20 +29,43 @@ def ensure() -> None:
     asset_lib.path = str(ASSETS_PATH)
 
 
+def is_asset(content: dict) -> bool:
+    """
+    Return whether the dictionary is an asset.
+    """
+    return "type" in content
+
+
+def is_catalog(content: dict) -> bool:
+    """
+    Return whether the dictionary is a catalog.
+    """
+    return not is_asset(content)
+
+
+def get_asset_filepath(truncated_filepath) -> str:
+    """
+    Returns the complete filepath.
+    """
+    return ASSETS_PATH / truncated_filepath
+
+
 def get_all_libraries() -> dict:
     """
-    Returns a nested dictionary with all the assets
+    Returns a nested dictionary with all the assets.
     """
     library_furniture = data.library_furniture
     library_human_basemesh = data.library_human_basemesh
     library_parametric_primitives = data.library_parametric_primitives
     library_hair_operators = data.library_hair_operators
+    library_mock = data.library_mock
 
     library_merged = merge_asset_libraries((
         library_furniture,
         library_human_basemesh,
         library_parametric_primitives,
         library_hair_operators,
+        library_mock,
     ))
     return library_merged
 

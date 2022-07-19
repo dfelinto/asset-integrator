@@ -1,6 +1,8 @@
 from asset_integration.asset_library import (
     filter_dictionary,
     merge_asset_libraries,
+    is_asset,
+    is_catalog,
 )
 from asset_integration import (
     __version__,
@@ -58,6 +60,68 @@ class TestCatalogParser(unittest.TestCase):
                     'D': {},
                 }
             },
+        }
+
+        self.assertDictEqual(
+            library_result, merge_asset_libraries((library_a, library_b)),
+        )
+
+    def test_simpler_catalog(self):
+        library_a = {
+            'Objects':
+            {
+                'Cube': {
+                    'type': 'OBJECT',
+                },
+                'Material': {
+                    'type': 'MATERIAL',
+                },
+                'Sub Catalog':
+                {
+                    'Cone': {
+                        'type': 'OBJECT',
+                    },
+                }
+            }
+        }
+
+        library_b = {
+            'Objects':
+            {
+                'Grid': {
+                    'type': 'OBJECT',
+                },
+                'Sub Catalog':
+                {
+                    'Pyramid': {
+                        'type': 'OBJECT',
+                    },
+                }
+            }
+        }
+
+        library_result = {
+            'Objects':
+            {
+                'Cube': {
+                    'type': 'OBJECT',
+                },
+                'Grid': {
+                    'type': 'OBJECT',
+                },
+                'Material': {
+                    'type': 'MATERIAL',
+                },
+                'Sub Catalog':
+                {
+                    'Cone': {
+                        'type': 'OBJECT',
+                    },
+                    'Pyramid': {
+                        'type': 'OBJECT',
+                    },
+                }
+            }
         }
 
         self.assertDictEqual(
@@ -177,6 +241,80 @@ class TestCatalogFilter(unittest.TestCase):
                     'is_node': True,
                 })
         )
+
+    def test_simpler_catalog(self):
+        library = {
+            'Objects':
+            {
+                'Cube': {
+                    'type': 'OBJECT',
+                },
+                'Material': {
+                    'type': 'MATERIAL',
+                },
+                'Sub Catalog':
+                {
+                    'Cone': {
+                        'type': 'OBJECT',
+                    },
+                }
+            }
+        }
+
+        library_result = {
+            'Objects':
+            {
+                'Cube': {
+                    'type': 'OBJECT',
+                },
+                'Sub Catalog':
+                {
+                    'Cone': {
+                        'type': 'OBJECT',
+                    },
+                }
+            }
+        }
+
+        self.assertDictEqual(
+            library_result, filter_dictionary(
+                library, {
+                    'type': 'OBJECT',
+                })
+        )
+
+
+class TestCatalog(unittest.TestCase):
+    library = {
+        'My Catalog':
+        {
+            'Sub Catalog':
+            {
+                'A': {'type': 'OBJECT'},
+                'B': {'type': 'COLLECTION'},
+            },
+        }
+    }
+
+    def test_is_catalog_a(self):
+        self.assertTrue(is_catalog(self.library))
+        self.assertFalse(is_asset(self.library))
+
+    def test_is_catalog_b(self):
+        sub_library = self.library.get('My Catalog')
+        self.assertTrue(is_catalog(sub_library))
+        self.assertFalse(is_asset(sub_library))
+
+    def test_is_asset(self):
+        sub_library = self.library.get('My Catalog').get("Sub Catalog")
+        asset_a = sub_library.get("A")
+        asset_b = sub_library.get("B")
+
+        self.assertTrue(is_asset(asset_a))
+        self.assertFalse(is_catalog(asset_a))
+
+        self.assertTrue(is_asset(asset_b))
+        self.assertFalse(is_catalog(asset_b))
 
 
 if __name__ == '__main__':

@@ -141,3 +141,31 @@ library_hair_operators = {
         }
     }
 }
+
+
+library_mock = {
+    'Mesh':
+    {
+        'Monkey':
+        {
+            'filepath': "Parametric Primitives/Parametric Primitives.blend",
+            'type': 'OBJECT',
+        },
+        'Grid':
+        {
+            'filepath': "Parametric Primitives/Parametric Primitives.blend",
+            'type': 'OBJECT',
+        },
+        'Parametric': {
+            'Monkey': {
+                'filepath': "Parametric Primitives/Parametric Primitives.blend",
+                'type': 'OBJECT',
+            },
+        },
+    },
+    'My Asset':
+    {
+        'filepath': "Parametric Primitives/Parametric Primitives.blend",
+        'type': 'OBJECT',
+    },
+}

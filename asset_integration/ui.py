@@ -2,9 +2,13 @@
 
 from .asset_library import (
     add_menu_objects_collections_get,
+    get_asset_filepath,
+    is_catalog,
 )
 
-from . import menus
+from .operator import (
+    OBJECT_OT_add_asset_object,
+)
 
 import bpy
 
@@ -12,67 +16,62 @@ import bpy
 def custom_add_menu(elements: list, operator: str):
     def function_template(self, context):
         layout = self.layout
+        layout.separator()
         for key, value in elements:
-            layout.operator(operator, text=key)
-            # TODO: pass info to operator
-
-            # element=
-            # 'Cone': {
-            #     'filepath': "Parametric Primitives/Parametric Primitives.blend",
-            #     'type': 'OBJECT',
-            # },
+            operator_props = layout.operator(operator, text=key)
+            operator_props.id_name = key
+            operator_props.filepath = str(
+                get_asset_filepath(value['filepath']))
 
     return function_template
 
 
 def populate_menu(menu, content: dict, operator: str):
     elements = []
-    for key in content.keys():
+    for key in sorted(content.keys()):
         value = content[key]
-        is_catalog = not value.get('type')
-
-        if not is_catalog:
+        if not is_catalog(value):
             elements.append((key, value))
         else:
             # TODO create menu dynamically
             # submenu = ...
+            #
             pass
     menu.append(custom_add_menu(elements, operator))
 
 
 def populate_object_add_menu():
+    # TODO other hard-coded categories
+    menus_lookup = {
+        'Mesh': bpy.types.VIEW3D_MT_mesh_add,
+        'Curve': bpy.types.VIEW3D_MT_curve_add,
+    }
+
     content = add_menu_objects_collections_get()
+    elements = {}
 
     for key in content.keys():
         value = content[key]
-        is_catalog = not value.get('type')
 
-        if key == 'Mesh':
-            menu = bpy.types.VIEW3D_MT_mesh_add
-            # TODO get the correct operator
-            populate_menu(menu, value, "wm.open_mainfile")
-            continue
+        menu = menus_lookup.get(key)
 
-        # TODO if no Menu yet
+        if is_catalog(value) and menu:
+            populate_menu(menu, value, OBJECT_OT_add_asset_object.bl_idname)
+        else:
+            elements[key] = value
 
-            # with menus.Menu('Custom Menu') as menu:
-            #     with menu.add_submenu('Submenu') as submenu:
-            #         submenu.add_operator('mesh.primitive_cube_adad')
-            #     menu.add_operator(lambda: 1/0, 'Raise Exception')
-            #     menu.register()
-            #     menu.unregister()
-
-            # bpy.types.VIEW3D_MT_mesh_add.append(add_object_button)
+    populate_menu(bpy.types.VIEW3D_MT_add, elements,
+                  OBJECT_OT_add_asset_object.bl_idname)
 
 
 def unpopulate_object_add_menu():
+    # TODO unregister everything
     pass
-    # bpy.types.VIEW3D_MT_mesh_add.remove(add_object_button)
 
 
-class DynamicMenu(bpy.types.Menu):
-    bl_label = "Dynamic Meny"
-    bl_idname = "MT_dynamic_menu"
+class ASSET_MT_DynamicMenu(bpy.types.Menu):
+    bl_idname = "ASSET_MT_DynamicMenu"
+    bl_label = "Dynamic Menu"
 
     def draw(self, context):
         layout = self.layout
@@ -80,10 +79,10 @@ class DynamicMenu(bpy.types.Menu):
 
 
 def register():
-    bpy.utils.register_class(DynamicMenu)
+    bpy.utils.register_class(ASSET_MT_DynamicMenu)
     populate_object_add_menu()
 
 
 def unregister():
-    bpy.utils.unregister_class(DynamicMenu)
+    bpy.utils.unregister_class(ASSET_MT_DynamicMenu)
     unpopulate_object_add_menu()
