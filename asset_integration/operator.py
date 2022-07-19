@@ -19,7 +19,7 @@ class OBJECT_OT_add_asset_object(bpy.types.Operator):
 
 
 class NODES_OT_add_asset_node(bpy.types.Operator):
-    """Add Node Group Node"""
+    """Add node group node"""
     bl_idname = "nodes.add_asset_node"
     bl_label = "Add Asset Node"
 
@@ -52,7 +52,7 @@ class NODES_OT_add_asset_node(bpy.types.Operator):
 
 
 class NODES_OT_asset_operator(bpy.types.Operator):
-    """Tooltip"""
+    """Run node group tool"""
     bl_idname = "nodes.add_asset_operator"
     bl_label = "Add Asset Operator"
 
