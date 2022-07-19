@@ -132,7 +132,7 @@ def merge_dict_recursive(dict_final: dict, dict_iter: dict):
         if dict_final.get(key):
             merge_dict_recursive(dict_final[key], dict_iter[key])
         else:
-            dict_final[key] = dict_iter[key]
+            dict_final[key] = dict_iter[key].copy()
 
 
 def merge_asset_libraries(libraries: list) -> dict:
