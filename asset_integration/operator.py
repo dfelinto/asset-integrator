@@ -31,11 +31,31 @@ class NODES_OT_add_asset_node(bpy.types.Operator):
         return {'FINISHED'}
 
 
+class NODES_OT_asset_operator(bpy.types.Operator):
+    """Tooltip"""
+    bl_idname = "nodes.add_asset_operator"
+    bl_label = "Add Asset Operator"
+
+    filepath: bpy.props.StringProperty(name="Filepath")
+    id_name: bpy.props.StringProperty(name="ID Name")
+
+    def execute(self, context):
+        # TODO actual implementation (call other script)
+        print(self.filepath)
+        return {'FINISHED'}
+
+
+classes = (
+    OBJECT_OT_add_asset_object,
+    NODES_OT_add_asset_node,
+    NODES_OT_asset_operator,
+)
+
 def register():
-    bpy.utils.register_class(OBJECT_OT_add_asset_object)
-    bpy.utils.register_class(NODES_OT_add_asset_node)
+    for c in classes:
+        bpy.utils.register_class(c)
 
 
 def unregister():
-    bpy.utils.unregister_class(OBJECT_OT_add_asset_object)
-    bpy.utils.unregister_class(NODES_OT_add_asset_node)
+    for c in classes:
+        bpy.utils.unregister_class(c)

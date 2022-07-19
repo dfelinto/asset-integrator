@@ -13,6 +13,7 @@ from .asset_library import (
 from .operator import (
     OBJECT_OT_add_asset_object,
     NODES_OT_add_asset_node,
+    NODES_OT_asset_operator,
 )
 
 import bpy
@@ -144,8 +145,7 @@ def populate_geometry_nodes_tools():
     )
     content = operator_tools_curves_geometry_nodes_get()
     populate_menu(menus, bpy.types.VIEW3D_MT_editor_menus,
-                  content, NODES_OT_add_asset_node.bl_idname)
-    # operator to add them
+                  content, NODES_OT_asset_operator.bl_idname)
 
 
 CONTEXT_ID = "dynamic_menu_id"
