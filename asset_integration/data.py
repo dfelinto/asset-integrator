@@ -144,9 +144,9 @@ library_hair_operators = {
 
 
 library_mock = {
-    'Unassigned':
+    'Attribute':
     {
-        'Delete Hair': {
+        'Set Hair Attribute': {
             'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
             'type': 'NODE_TREE',
             'subtype': 'GEOMETRY_NODES',
@@ -154,5 +154,24 @@ library_mock = {
             'is_node': True,
             'is_operator': True,
         }
-    }
+    },
+    'Lonely Node': {
+        'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+        'type': 'NODE_TREE',
+        'subtype': 'GEOMETRY_NODES',
+        'is_modifier': False,
+        'is_node': True,
+        'is_operator': True,
+    },
+    'New Category':
+    {
+        'A Node': {
+            'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+            'type': 'NODE_TREE',
+            'subtype': 'GEOMETRY_NODES',
+            'is_modifier': False,
+            'is_node': True,
+            'is_operator': True,
+        }
+    },
 }
