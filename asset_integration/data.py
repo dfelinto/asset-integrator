@@ -125,7 +125,7 @@ library_hair_operators = {
             'type': 'NODE_TREE',
             'subtype': 'GEOMETRY_NODES',
             'is_modifier': False,
-            'is_node': False,
+            'is_node': True,
             'is_operator': True,
         }
     },
@@ -144,28 +144,15 @@ library_hair_operators = {
 
 
 library_mock = {
-    'Mesh':
+    'Unassigned':
     {
-        'Monkey':
-        {
-            'filepath': "Parametric Primitives/Parametric Primitives.blend",
-            'type': 'OBJECT',
-        },
-        'Grid':
-        {
-            'filepath': "Parametric Primitives/Parametric Primitives.blend",
-            'type': 'OBJECT',
-        },
-        'Parametric': {
-            'Monkey': {
-                'filepath': "Parametric Primitives/Parametric Primitives.blend",
-                'type': 'OBJECT',
-            },
-        },
-    },
-    'My Asset':
-    {
-        'filepath': "Parametric Primitives/Parametric Primitives.blend",
-        'type': 'OBJECT',
-    },
+        'Randomize Length': {
+            'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+            'type': 'NODE_TREE',
+            'subtype': 'GEOMETRY_NODES',
+            'is_modifier': False,
+            'is_node': True,
+            'is_operator': True,
+        }
+    }
 }
