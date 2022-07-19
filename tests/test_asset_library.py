@@ -484,6 +484,31 @@ class TestCatalogFilter(unittest.TestCase):
                 })
         )
 
+    def test_filter_nodes_e(self):
+        library_nodes = {
+            'Unassigned':
+                {
+                    'Randomize Length': {
+                        'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+                        'type': 'NODE_TREE',
+                        'subtype': 'GEOMETRY_NODES',
+                        'is_modifier': False,
+                        'is_node': True,
+                        'is_operator': True,
+                    }
+                }
+        }
+
+        self.assertDictEqual(
+            library_nodes, filter_dictionary(
+                library_nodes,
+                {
+                    'type': 'NODE_TREE',
+                    'subtype': 'GEOMETRY_NODES',
+                    'is_node': True,
+                })
+        )
+
     def test_simpler_catalog(self):
         library = {
             'Objects':
