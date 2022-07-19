@@ -118,7 +118,7 @@ def add_menu_geometry_nodes_get() -> dict:
     all_libraries = get_all_libraries()
     return filter_dictionary(all_libraries,
                              {
-                                 'type': 'NODETREE',
+                                 'type': 'NODE_TREE',
                                  'subtype': 'GEOMETRY_NODES',
                                  'is_node': True,
                              })
