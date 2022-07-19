@@ -52,7 +52,7 @@ def custom_add_menu(elements: list, operator: str):
     return function_template
 
 
-def populate_menu(menu, content: dict, operator: str):
+def populate_menu_doit(menu, content: dict, operator: str):
     elements = []
     for key in sorted(content.keys()):
         value = content[key]
@@ -60,14 +60,11 @@ def populate_menu(menu, content: dict, operator: str):
     menu.append(custom_add_menu(elements, operator))
 
 
-def populate_object_add_menu():
-    # TODO other hard-coded categories
-    menus_lookup = {
-        'Mesh': bpy.types.VIEW3D_MT_mesh_add,
-        'Curve': bpy.types.VIEW3D_MT_curve_add,
-    }
-
-    content = add_menu_objects_collections_get()
+def populate_menu(menus: list, main_menu: bpy.types.Menu, content: dict, operator_name: str):
+    """
+    Populates a menu dynamically.
+    """
+    menus_lookup = {menu.bl_label: menu for menu in menus}
     elements = {}
 
     for key in content.keys():
@@ -76,38 +73,65 @@ def populate_object_add_menu():
         menu = menus_lookup.get(key)
 
         if is_catalog(value) and menu:
-            populate_menu(menu, value, OBJECT_OT_add_asset_object.bl_idname)
+            populate_menu_doit(menu, value, operator_name)
         else:
             elements[key] = value
 
-    populate_menu(bpy.types.VIEW3D_MT_add, elements,
-                  OBJECT_OT_add_asset_object.bl_idname)
+    populate_menu_doit(main_menu, elements, operator_name)
+
+
+def populate_object_add_menu():
+    """
+    Populate the viewport add menu.
+    """
+    # TODO other hard-coded categories such as grease pencil and empty
+    menus = (
+        bpy.types.VIEW3D_MT_mesh_add,
+        bpy.types.VIEW3D_MT_curve_add,
+        bpy.types.VIEW3D_MT_surface_add,
+        bpy.types.VIEW3D_MT_metaball_add,
+        bpy.types.VIEW3D_MT_volume_add,
+        bpy.types.VIEW3D_MT_armature_add,
+        bpy.types.VIEW3D_MT_image_add,
+        bpy.types.VIEW3D_MT_light_add,
+        bpy.types.VIEW3D_MT_lightprobe_add,
+        bpy.types.VIEW3D_MT_camera_add,
+    )
+    content = add_menu_objects_collections_get()
+    populate_menu(menus, bpy.types.VIEW3D_MT_add,
+                  content, OBJECT_OT_add_asset_object.bl_idname)
 
 
 def populate_geometry_nodes_add_menu():
-    # TODO other hard-coded categories
-    # TODO unify with populate_object_add_menu
-    menus_lookup = {
-        bpy.types.NODE_MT_category_GEO_ATTRIBUTE.bl_label: bpy.types.NODE_MT_category_GEO_ATTRIBUTE,
-        bpy.types.NODE_MT_category_GEO_UTILITIES.bl_label: bpy.types.NODE_MT_category_GEO_UTILITIES,
-    }
+    """
+    Populate the Geometry Nodes add nodes menus.
+    """
+    menus = (
+        bpy.types.NODE_MT_category_GEO_ATTRIBUTE,
+        bpy.types.NODE_MT_category_GEO_COLOR,
+        bpy.types.NODE_MT_category_GEO_CURVE,
+        bpy.types.NODE_MT_category_GEO_PRIMITIVES_CURVE,
+        bpy.types.NODE_MT_category_GEO_GEOMETRY,
+        bpy.types.NODE_MT_category_GEO_INPUT,
+        bpy.types.NODE_MT_category_GEO_INSTANCE,
+        bpy.types.NODE_MT_category_GEO_MESH,
+        bpy.types.NODE_MT_category_GEO_PRIMITIVES_MESH,
+        bpy.types.NODE_MT_category_GEO_OUTPUT,
+        bpy.types.NODE_MT_category_GEO_POINT,
+        bpy.types.NODE_MT_category_GEO_TEXT,
+        bpy.types.NODE_MT_category_GEO_TEXTURE,
+        bpy.types.NODE_MT_category_GEO_UTILITIES,
+        bpy.types.NODE_MT_category_GEO_UV,
+        bpy.types.NODE_MT_category_GEO_VECTOR,
+        bpy.types.NODE_MT_category_GEO_VOLUME,
+        bpy.types.NODE_MT_category_GEO_GROUP,
+        bpy.types.NODE_MT_category_GEO_LAYOUT,
+    )
+    menus_lookup = {menu.bl_label: menu for menu in menus}
 
     content = add_menu_geometry_nodes_get()
-    print("CONTENT", content)
-    elements = {}
-
-    for key in content.keys():
-        value = content[key]
-
-        menu = menus_lookup.get(key)
-
-        if is_catalog(value) and menu:
-            populate_menu(menu, value, NODES_OT_add_asset_node.bl_idname)
-        else:
-            elements[key] = value
-
-    populate_menu(bpy.types.NODE_MT_node, elements,
-                  NODES_OT_add_asset_node.bl_idname)
+    populate_menu(menus, bpy.types.NODE_MT_add,
+                  content, NODES_OT_add_asset_node.bl_idname)
 
 
 CONTEXT_ID = "dynamic_menu_id"
