@@ -1,9 +1,11 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
+from unittest.mock import NonCallableMagicMock
 from .asset_library import (
     add_menu_objects_collections_get,
     get_asset_filepath,
     is_catalog,
+    is_asset,
 )
 
 from .operator import (
@@ -13,15 +15,37 @@ from .operator import (
 import bpy
 
 
+class MenuItem:
+    _is_catalog = False
+    _name = ""
+    _asset = {}
+
+    def __init__(self, name, asset):
+        self._name = name
+        self._is_catalog = is_catalog(asset)
+        self._asset = asset
+
+
+def set_operator_properties(props, name: str, asset: dict):
+    props.id_name = name
+    props.filepath = str(get_asset_filepath(asset['filepath']))
+
+
 def custom_add_menu(elements: list, operator: str):
     def function_template(self, context):
         layout = self.layout
         layout.separator()
-        for key, value in elements:
-            operator_props = layout.operator(operator, text=key)
-            operator_props.id_name = key
-            operator_props.filepath = str(
-                get_asset_filepath(value['filepath']))
+        for element in elements:
+            if element._is_catalog:
+                row = layout.row()
+                row.context_pointer_set(CONTEXT_ID, row)
+                ASSET_MT_DynamicMenu._parents[row] = (
+                    None, MenuPayload(element._asset, operator))
+                row.menu(ASSET_MT_DynamicMenu.bl_idname, text=element._name)
+            else:
+                operator_props = layout.operator(operator, text=element._name)
+                set_operator_properties(
+                    operator_props, element._name, element._asset)
 
     return function_template
 
@@ -30,13 +54,7 @@ def populate_menu(menu, content: dict, operator: str):
     elements = []
     for key in sorted(content.keys()):
         value = content[key]
-        if not is_catalog(value):
-            elements.append((key, value))
-        else:
-            # TODO create menu dynamically
-            # submenu = ...
-            #
-            pass
+        elements.append(MenuItem(key, value))
     menu.append(custom_add_menu(elements, operator))
 
 
@@ -64,18 +82,58 @@ def populate_object_add_menu():
                   OBJECT_OT_add_asset_object.bl_idname)
 
 
-def unpopulate_object_add_menu():
-    # TODO unregister everything
-    pass
+CONTEXT_ID = "dynamic_menu_id"
+
+
+class MenuPayload:
+    _asset = {}
+    _operator = ""
+
+    def __init__(self, asset: dict, operator: str):
+        self._asset = asset
+        self._operator = operator
 
 
 class ASSET_MT_DynamicMenu(bpy.types.Menu):
-    bl_idname = "ASSET_MT_DynamicMenu"
     bl_label = "Dynamic Menu"
+    bl_idname = "ASSET_MT_DynamicMenu"
+
+    _parents = {}
+
+    @staticmethod
+    def _calc_path(layout):
+        result = []
+        while layout:
+            layout, payload = ASSET_MT_DynamicMenu._parents.get(
+                layout, (None, None))
+            result.append(payload)
+        result.reverse()
+        return result
 
     def draw(self, context):
         layout = self.layout
-        layout.operator("wm.open_mainfile")
+        parent = getattr(context, CONTEXT_ID, None)
+
+        if parent is None:
+            ASSET_MT_DynamicMenu._parents.clear()
+            return
+
+        payload = ASSET_MT_DynamicMenu._calc_path(parent)[0]
+        asset = payload._asset
+        operator = payload._operator
+
+        for key in asset.keys():
+            value = asset.get(key)
+
+            if is_asset(value):
+                operator_props = layout.operator(operator, text=key)
+                set_operator_properties(operator_props, key, value)
+            else:
+                row = layout.row()
+                row.context_pointer_set(CONTEXT_ID, row)
+                ASSET_MT_DynamicMenu._parents[row] = (
+                    None, MenuPayload(value, operator))
+                row.menu(ASSET_MT_DynamicMenu.bl_idname, text=key)
 
 
 def register():
@@ -85,4 +143,3 @@ def register():
 
 def unregister():
     bpy.utils.unregister_class(ASSET_MT_DynamicMenu)
-    unpopulate_object_add_menu()
