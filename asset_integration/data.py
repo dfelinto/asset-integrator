@@ -146,7 +146,7 @@ library_hair_operators = {
 library_mock = {
     'Unassigned':
     {
-        'Randomize Length': {
+        'Delete Hair': {
             'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
             'type': 'NODE_TREE',
             'subtype': 'GEOMETRY_NODES',
