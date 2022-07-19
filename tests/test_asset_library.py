@@ -209,7 +209,7 @@ class TestCatalogFilter(unittest.TestCase):
                 self.library_all, {'type': 'OBJECT'})
         )
 
-    def test_filter_nodes(self):
+    def test_filter_nodes_a(self):
         library_result = {
             'My Catalog':
             {
@@ -239,6 +239,248 @@ class TestCatalogFilter(unittest.TestCase):
                     'type': 'NODE_TREE',
                     'subtype': 'GEOMETRY_NODES',
                     'is_node': True,
+                })
+        )
+
+    def test_filter_nodes_b(self):
+        library_nodes = {
+            'Noise':
+            {
+                'Hair Noise': {
+                    'filepath': 'Geometry Nodes Utils/einar_hair_tools.blend',
+                    'type': 'NODE_TREE',
+                    'subtype': 'GEOMETRY_NODES',
+                    'is_modifier': False,
+                    'is_node': False,
+                    'is_operator': True,
+                },
+                'Hair Noise Proximity': {
+                    'filepath': 'Geometry Nodes Utils/einar_hair_tools.blend',
+                    'type': 'NODE_TREE',
+                    'subtype': 'GEOMETRY_NODES',
+                    'is_modifier': False,
+                    'is_node': False,
+                    'is_operator': True,
+                }
+            },
+            'Utilities': {
+                'Delete Hair': {
+                    'filepath': 'Geometry Nodes Utils/einar_hair_tools.blend',
+                    'type': 'NODE_TREE',
+                    'subtype': 'GEOMETRY_NODES',
+                    'is_modifier': False,
+                    'is_node': False,
+                    'is_operator': True,
+                },
+                'Hair Thickness': {
+                    'filepath': 'Geometry Nodes Utils/einar_hair_tools.blend',
+                    'type': 'NODE_TREE',
+                    'subtype': 'GEOMETRY_NODES',
+                    'is_modifier': False,
+                    'is_node': False,
+                    'is_operator': True,
+                },
+                'Resample': {
+                    'filepath': 'Geometry Nodes Utils/einar_hair_tools.blend',
+                    'type': 'NODE_TREE',
+                    'subtype': 'GEOMETRY_NODES',
+                    'is_modifier': False,
+                    'is_node': True,
+                    'is_operator': True,
+                },
+            },
+            'Unassigned': {
+                'Randomize Length': {
+                    'filepath': 'Geometry Nodes Utils/einar_hair_tools.blend',
+                    'type': 'NODE_TREE',
+                    'subtype': 'GEOMETRY_NODES',
+                    'is_modifier': False,
+                    'is_node': False,
+                    'is_operator': True,
+                },
+            }
+        }
+
+        library_result = {
+            'Utilities': {
+                'Resample': {
+                    'filepath': 'Geometry Nodes Utils/einar_hair_tools.blend',
+                    'type': 'NODE_TREE',
+                    'subtype': 'GEOMETRY_NODES',
+                    'is_modifier': False,
+                    'is_node': True,
+                    'is_operator': True,
+                },
+            },
+        }
+
+        self.assertDictEqual(
+            library_result, filter_dictionary(
+                library_nodes,
+                {
+                    'type': 'NODE_TREE',
+                    'subtype': 'GEOMETRY_NODES',
+                    'is_node': True,
+                })
+        )
+
+    def test_filter_nodes_c(self):
+        library_nodes = {
+            'Noise':
+            {
+                'Hair Noise': {
+                    'filepath': 'Geometry Nodes Utils/einar_hair_tools.blend',
+                    'type': 'NODE_TREE',
+                    'subtype': 'GEOMETRY_NODES',
+                    'is_modifier': False,
+                    'is_node': False,
+                    'is_operator': True,
+                },
+                'Hair Noise Proximity': {
+                    'filepath': 'Geometry Nodes Utils/einar_hair_tools.blend',
+                    'type': 'NODE_TREE',
+                    'subtype': 'GEOMETRY_NODES',
+                    'is_modifier': False,
+                    'is_node': False,
+                    'is_operator': True,
+                }
+            },
+            'Utilities': {
+                'Delete Hair': {
+                    'filepath': 'Geometry Nodes Utils/einar_hair_tools.blend',
+                    'type': 'NODE_TREE',
+                    'subtype': 'GEOMETRY_NODES',
+                    'is_modifier': False,
+                    'is_node': False,
+                    'is_operator': True,
+                },
+                'Hair Thickness': {
+                    'filepath': 'Geometry Nodes Utils/einar_hair_tools.blend',
+                    'type': 'NODE_TREE',
+                    'subtype': 'GEOMETRY_NODES',
+                    'is_modifier': False,
+                    'is_node': False,
+                    'is_operator': True,
+                },
+                'Resample': {
+                    'filepath': 'Geometry Nodes Utils/einar_hair_tools.blend',
+                    'type': 'NODE_TREE',
+                    'subtype': 'GEOMETRY_NODES',
+                    'is_modifier': False,
+                    'is_node': True,
+                    'is_operator': True,
+                },
+            },
+            'Unassigned': {
+                'Randomize Length': {
+                    'filepath': 'Geometry Nodes Utils/einar_hair_tools.blend',
+                    'type': 'NODE_TREE',
+                    'subtype': 'GEOMETRY_NODES',
+                    'is_modifier': False,
+                    'is_node': False,
+                    'is_operator': True,
+                },
+            }
+        }
+
+        library_result = {
+            'Noise':
+            {
+                'Hair Noise': {
+                    'filepath': 'Geometry Nodes Utils/einar_hair_tools.blend',
+                    'type': 'NODE_TREE',
+                    'subtype': 'GEOMETRY_NODES',
+                    'is_modifier': False,
+                    'is_node': False,
+                    'is_operator': True,
+                },
+                'Hair Noise Proximity': {
+                    'filepath': 'Geometry Nodes Utils/einar_hair_tools.blend',
+                    'type': 'NODE_TREE',
+                    'subtype': 'GEOMETRY_NODES',
+                    'is_modifier': False,
+                    'is_node': False,
+                    'is_operator': True,
+                }
+            },
+            'Utilities': {
+                'Delete Hair': {
+                    'filepath': 'Geometry Nodes Utils/einar_hair_tools.blend',
+                    'type': 'NODE_TREE',
+                    'subtype': 'GEOMETRY_NODES',
+                    'is_modifier': False,
+                    'is_node': False,
+                    'is_operator': True,
+                },
+                'Hair Thickness': {
+                    'filepath': 'Geometry Nodes Utils/einar_hair_tools.blend',
+                    'type': 'NODE_TREE',
+                    'subtype': 'GEOMETRY_NODES',
+                    'is_modifier': False,
+                    'is_node': False,
+                    'is_operator': True,
+                },
+            },
+            'Unassigned': {
+                'Randomize Length': {
+                    'filepath': 'Geometry Nodes Utils/einar_hair_tools.blend',
+                    'type': 'NODE_TREE',
+                    'subtype': 'GEOMETRY_NODES',
+                    'is_modifier': False,
+                    'is_node': False,
+                    'is_operator': True,
+                },
+            }
+        }
+
+        self.assertDictEqual(
+            library_result, filter_dictionary(
+                library_nodes,
+                {
+                    'type': 'NODE_TREE',
+                    'subtype': 'GEOMETRY_NODES',
+                    'is_node': False,
+                })
+        )
+
+    def test_filter_nodes_d(self):
+        library_nodes = {
+            'Hair Noise Proximity': {
+                'filepath': 'Geometry Nodes Utils/einar_hair_tools.blend',
+                'type': 'NODE_TREE',
+                'subtype': 'GEOMETRY_NODES',
+                'is_modifier': False,
+                'is_node': False,
+                'is_operator': True,
+            },
+            'Resample': {
+                'filepath': 'Geometry Nodes Utils/einar_hair_tools.blend',
+                'type': 'NODE_TREE',
+                'subtype': 'GEOMETRY_NODES',
+                'is_modifier': False,
+                'is_node': True,
+                'is_operator': True,
+            },
+        }
+
+        library_result = {
+            'Hair Noise Proximity': {
+                'filepath': 'Geometry Nodes Utils/einar_hair_tools.blend',
+                'type': 'NODE_TREE',
+                'subtype': 'GEOMETRY_NODES',
+                'is_modifier': False,
+                'is_node': False,
+                'is_operator': True,
+            },
+        }
+
+        self.assertDictEqual(
+            library_result, filter_dictionary(
+                library_nodes,
+                {
+                    'type': 'NODE_TREE',
+                    'subtype': 'GEOMETRY_NODES',
+                    'is_node': False,
                 })
         )
 

@@ -2,6 +2,7 @@
 
 from unittest.mock import NonCallableMagicMock
 from .asset_library import (
+    add_menu_geometry_nodes_get,
     add_menu_objects_collections_get,
     get_asset_filepath,
     is_catalog,
@@ -10,6 +11,7 @@ from .asset_library import (
 
 from .operator import (
     OBJECT_OT_add_asset_object,
+    NODES_OT_add_asset_node,
 )
 
 import bpy
@@ -82,6 +84,32 @@ def populate_object_add_menu():
                   OBJECT_OT_add_asset_object.bl_idname)
 
 
+def populate_geometry_nodes_add_menu():
+    # TODO other hard-coded categories
+    # TODO unify with populate_object_add_menu
+    menus_lookup = {
+        bpy.types.NODE_MT_category_GEO_ATTRIBUTE.bl_label: bpy.types.NODE_MT_category_GEO_ATTRIBUTE,
+        bpy.types.NODE_MT_category_GEO_UTILITIES.bl_label: bpy.types.NODE_MT_category_GEO_UTILITIES,
+    }
+
+    content = add_menu_geometry_nodes_get()
+    print("CONTENT", content)
+    elements = {}
+
+    for key in content.keys():
+        value = content[key]
+
+        menu = menus_lookup.get(key)
+
+        if is_catalog(value) and menu:
+            populate_menu(menu, value, NODES_OT_add_asset_node.bl_idname)
+        else:
+            elements[key] = value
+
+    populate_menu(bpy.types.NODE_MT_node, elements,
+                  NODES_OT_add_asset_node.bl_idname)
+
+
 CONTEXT_ID = "dynamic_menu_id"
 
 
@@ -102,6 +130,9 @@ class ASSET_MT_DynamicMenu(bpy.types.Menu):
 
     @staticmethod
     def _calc_path(layout):
+        """
+        Accumulate a list of payloads and return them in-order.
+        """
         result = []
         while layout:
             layout, payload = ASSET_MT_DynamicMenu._parents.get(
@@ -112,18 +143,18 @@ class ASSET_MT_DynamicMenu(bpy.types.Menu):
 
     def draw(self, context):
         layout = self.layout
-        parent = getattr(context, CONTEXT_ID, None)
+        parent_id = getattr(context, CONTEXT_ID, None)
 
-        if parent is None:
+        if parent_id is None:
             ASSET_MT_DynamicMenu._parents.clear()
             return
 
-        payload = ASSET_MT_DynamicMenu._calc_path(parent)[0]
-        asset = payload._asset
+        payload = ASSET_MT_DynamicMenu._calc_path(parent_id)[0]
+        asset_tree = payload._asset
         operator = payload._operator
 
-        for key in asset.keys():
-            value = asset.get(key)
+        for key in asset_tree.keys():
+            value = asset_tree.get(key)
 
             if is_asset(value):
                 operator_props = layout.operator(operator, text=key)
@@ -132,13 +163,14 @@ class ASSET_MT_DynamicMenu(bpy.types.Menu):
                 row = layout.row()
                 row.context_pointer_set(CONTEXT_ID, row)
                 ASSET_MT_DynamicMenu._parents[row] = (
-                    None, MenuPayload(value, operator))
+                    parent_id, MenuPayload(value, operator))
                 row.menu(ASSET_MT_DynamicMenu.bl_idname, text=key)
 
 
 def register():
     bpy.utils.register_class(ASSET_MT_DynamicMenu)
     populate_object_add_menu()
+    populate_geometry_nodes_add_menu()
 
 
 def unregister():

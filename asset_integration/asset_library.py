@@ -79,7 +79,7 @@ def passed_rules_filter(element: dict, rules: dict) -> bool:
     """
     for key in rules.keys():
         value = element.get(key)
-        if not value:
+        if value is None:
             return False
 
         rules_values = rules[key]
@@ -112,6 +112,16 @@ def filter_dictionary(catalog_dict: dict, rules: dict) -> dict:
 def add_menu_objects_collections_get() -> dict:
     all_libraries = get_all_libraries()
     return filter_dictionary(all_libraries, {'type': {'OBJECT', 'COLLECTION'}})
+
+
+def add_menu_geometry_nodes_get() -> dict:
+    all_libraries = get_all_libraries()
+    return filter_dictionary(all_libraries,
+                             {
+                                 'type': 'NODETREE',
+                                 'subtype': 'GEOMETRY_NODES',
+                                 'is_node': True,
+                             })
 
 
 def merge_dict_recursive(dict_final: dict, dict_iter: dict):
