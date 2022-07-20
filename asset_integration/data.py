@@ -57,27 +57,34 @@ library_parametric_primitives = {
             'Cone': {
                 'filepath': "Parametric Primitives/Parametric Primitives.blend",
                 'type': 'OBJECT',
-                'description': 'Parametric Cone'
+                'description': 'Add a cone, edit it in the modifier'
             },
             'Cube': {
                 'filepath': "Parametric Primitives/Parametric Primitives.blend",
                 'type': 'OBJECT',
+                'description': 'Add a cube, edit it in the modifier'
+
             },
             'Cylinder': {
                 'filepath': "Parametric Primitives/Parametric Primitives.blend",
                 'type': 'OBJECT',
+                'description': 'Add a cylinder, edit it in the modifier'
             },
             'Grid': {
                 'filepath': "Parametric Primitives/Parametric Primitives.blend",
                 'type': 'OBJECT',
+                'description': 'Add a grid, edit it in the modifier'
             },
             'Icosphere': {
                 'filepath': "Parametric Primitives/Parametric Primitives.blend",
                 'type': 'OBJECT',
+                'description': 'Add an icosphere, edit it in the modifier'
             },
             'UV Sphere': {
                 'filepath': "Parametric Primitives/Parametric Primitives.blend",
                 'type': 'OBJECT',
+                'description': 'Add a uv sphere, edit it in the modifier'
+
             },
         },
     }
@@ -88,7 +95,7 @@ library_hair_operators = {
     {
         'Delete Hair': {
             'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
-            'description': 'Delete hair based on selection',
+            'description': 'Delete selected curves',
             'type': 'NODE_TREE',
             'subtype': 'GEOMETRY_NODES',
             'is_modifier': False,
@@ -100,6 +107,7 @@ library_hair_operators = {
     {
         'Hair Noise': {
             'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+            'description': 'Mess the hair around',
             'type': 'NODE_TREE',
             'subtype': 'GEOMETRY_NODES',
             'is_modifier': False,
@@ -119,6 +127,7 @@ library_hair_operators = {
     {
         'Hair Thickness': {
             'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+            'description': 'Control the hair thickness',
             'type': 'NODE_TREE',
             'subtype': 'GEOMETRY_NODES',
             'is_modifier': False,
@@ -127,6 +136,7 @@ library_hair_operators = {
         },
         'Resample': {
             'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+            'description': 'Change the amount of control points for the curves',
             'type': 'NODE_TREE',
             'subtype': 'GEOMETRY_NODES',
             'is_modifier': False,

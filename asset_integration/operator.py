@@ -32,6 +32,7 @@ class OBJECT_OT_add_asset_object(bpy.types.Operator, add_asset):
         )
 
         bpy.ops.transform.translate(value=context.scene.cursor.location)
+        context.view_layer.objects.active = context.view_layer.objects.selected[0]
         return {'FINISHED'}
 
 
