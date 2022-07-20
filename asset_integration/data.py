@@ -91,70 +91,70 @@ library_parametric_primitives = {
 }
 
 library_hair_operators = {
-    'Delete':
-    {
-        'Delete Hair': {
-            'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
-            'description': 'Delete selected curves',
-            'type': 'NODE_TREE',
-            'subtype': 'GEOMETRY_NODES',
-            'is_modifier': False,
-            'is_node': True,
-            'is_operator': True,
-        },
-    },
-    'Noise':
-    {
-        'Hair Noise': {
-            'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
-            'description': 'Mess the hair around',
-            'type': 'NODE_TREE',
-            'subtype': 'GEOMETRY_NODES',
-            'is_modifier': False,
-            'is_node': False,
-            'is_operator': True,
-        },
-        'Hair Noise Proximity': {
-            'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
-            'type': 'NODE_TREE',
-            'subtype': 'GEOMETRY_NODES',
-            'is_modifier': False,
-            'is_node': False,
-            'is_operator': True,
-        },
-    },
-    'Utilities':
-    {
-        'Hair Thickness': {
-            'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
-            'description': 'Control the hair thickness',
-            'type': 'NODE_TREE',
-            'subtype': 'GEOMETRY_NODES',
-            'is_modifier': False,
-            'is_node': False,
-            'is_operator': True,
-        },
-        'Resample': {
-            'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
-            'description': 'Change the amount of control points for the curves',
-            'type': 'NODE_TREE',
-            'subtype': 'GEOMETRY_NODES',
-            'is_modifier': False,
-            'is_node': True,
-            'is_operator': True,
-        }
-    },
-    'Unassigned':
-    {
-        'Randomize Length': {
-            'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
-            'type': 'NODE_TREE',
-            'subtype': 'GEOMETRY_NODES',
-            'is_modifier': False,
-            'is_node': False,
-            'is_operator': True,
-        }
-    }
+    # 'Delete':
+    # {
+    #     'Delete Hair': {
+    #         'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+    #         'description': 'Delete selected curves',
+    #         'type': 'NODE_TREE',
+    #         'subtype': 'GEOMETRY_NODES',
+    #         'is_modifier': False,
+    #         'is_node': True,
+    #         'is_operator': True,
+    #     },
+    # },
+    # 'Noise':
+    # {
+    #     'Hair Noise': {
+    #         'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+    #         'description': 'Mess the hair around',
+    #         'type': 'NODE_TREE',
+    #         'subtype': 'GEOMETRY_NODES',
+    #         'is_modifier': False,
+    #         'is_node': False,
+    #         'is_operator': True,
+    #     },
+    #     'Hair Noise Proximity': {
+    #         'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+    #         'type': 'NODE_TREE',
+    #         'subtype': 'GEOMETRY_NODES',
+    #         'is_modifier': False,
+    #         'is_node': False,
+    #         'is_operator': True,
+    #     },
+    # },
+    # 'Utilities':
+    # {
+    #     'Hair Thickness': {
+    #         'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+    #         'description': 'Control the hair thickness',
+    #         'type': 'NODE_TREE',
+    #         'subtype': 'GEOMETRY_NODES',
+    #         'is_modifier': False,
+    #         'is_node': False,
+    #         'is_operator': True,
+    #     },
+    #     'Resample': {
+    #         'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+    #         'description': 'Change the amount of control points for the curves',
+    #         'type': 'NODE_TREE',
+    #         'subtype': 'GEOMETRY_NODES',
+    #         'is_modifier': False,
+    #         'is_node': True,
+    #         'is_operator': True,
+    #     }
+    # },
+    # 'Unassigned':
+    # {
+    #     'Randomize Length': {
+    #         'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+    #         'type': 'NODE_TREE',
+    #         'subtype': 'GEOMETRY_NODES',
+    #         'is_modifier': False,
+    #         'is_node': False,
+    #         'is_operator': True,
+    #     }
+    # }
 }
 
 library_hair_operators_extra = {
@@ -202,80 +202,80 @@ library_hair_operators_extra = {
 }
 
 library_mock = {
-    'Attribute':
-    {
-        'Set Hair Attribute': {
-            'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
-            'type': 'NODE_TREE',
-            'subtype': 'GEOMETRY_NODES',
-            'is_modifier': False,
-            'is_node': True,
-            'is_operator': True,
-        }
-    },
-    'Select': {
-        'Odd Hairs': {
-            'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
-            'type': 'NODE_TREE',
-            'subtype': 'GEOMETRY_NODES',
-            'is_modifier': False,
-            'is_node': True,
-            'is_operator': True,
-        },
-        'Even More Hairs': {
-            'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
-            'type': 'NODE_TREE',
-            'subtype': 'GEOMETRY_NODES',
-            'is_modifier': False,
-            'is_node': False,
-            'is_operator': True,
-        },
-    },
-    'Curves': {
-        'Make Braids': {
-            'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
-            'type': 'NODE_TREE',
-            'subtype': 'GEOMETRY_NODES',
-            'is_modifier': False,
-            'is_node': False,
-            'is_operator': True,
-        },
-        'Make Straight Hair': {
-            'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
-            'type': 'NODE_TREE',
-            'subtype': 'GEOMETRY_NODES',
-            'is_modifier': False,
-            'is_node': True,
-            'is_operator': True,
-        },
-    },
-    'View': {
-        'View More Hair': {
-            'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
-            'type': 'NODE_TREE',
-            'subtype': 'GEOMETRY_NODES',
-            'is_modifier': False,
-            'is_node': False,
-            'is_operator': True,
-        },
-        'View Less Hair': {
-            'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
-            'type': 'NODE_TREE',
-            'subtype': 'GEOMETRY_NODES',
-            'is_modifier': False,
-            'is_node': True,
-            'is_operator': True,
-        },
-    },
-    'New Category':
-    {
-        'A Node': {
-            'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
-            'type': 'NODE_TREE',
-            'subtype': 'GEOMETRY_NODES',
-            'is_modifier': False,
-            'is_node': True,
-            'is_operator': True,
-        }
-    },
+    # 'Attribute':
+    # {
+    #     'Set Hair Attribute': {
+    #         'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+    #         'type': 'NODE_TREE',
+    #         'subtype': 'GEOMETRY_NODES',
+    #         'is_modifier': False,
+    #         'is_node': True,
+    #         'is_operator': True,
+    #     }
+    # },
+    # 'Select': {
+    #     'Odd Hairs': {
+    #         'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+    #         'type': 'NODE_TREE',
+    #         'subtype': 'GEOMETRY_NODES',
+    #         'is_modifier': False,
+    #         'is_node': True,
+    #         'is_operator': True,
+    #     },
+    #     'Even More Hairs': {
+    #         'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+    #         'type': 'NODE_TREE',
+    #         'subtype': 'GEOMETRY_NODES',
+    #         'is_modifier': False,
+    #         'is_node': False,
+    #         'is_operator': True,
+    #     },
+    # },
+    # 'Curves': {
+    #     'Make Braids': {
+    #         'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+    #         'type': 'NODE_TREE',
+    #         'subtype': 'GEOMETRY_NODES',
+    #         'is_modifier': False,
+    #         'is_node': False,
+    #         'is_operator': True,
+    #     },
+    #     'Make Straight Hair': {
+    #         'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+    #         'type': 'NODE_TREE',
+    #         'subtype': 'GEOMETRY_NODES',
+    #         'is_modifier': False,
+    #         'is_node': True,
+    #         'is_operator': True,
+    #     },
+    # },
+    # 'View': {
+    #     'View More Hair': {
+    #         'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+    #         'type': 'NODE_TREE',
+    #         'subtype': 'GEOMETRY_NODES',
+    #         'is_modifier': False,
+    #         'is_node': False,
+    #         'is_operator': True,
+    #     },
+    #     'View Less Hair': {
+    #         'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+    #         'type': 'NODE_TREE',
+    #         'subtype': 'GEOMETRY_NODES',
+    #         'is_modifier': False,
+    #         'is_node': True,
+    #         'is_operator': True,
+    #     },
+    # },
+    # 'New Category':
+    # {
+    #     'A Node': {
+    #         'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+    #         'type': 'NODE_TREE',
+    #         'subtype': 'GEOMETRY_NODES',
+    #         'is_modifier': False,
+    #         'is_node': True,
+    #         'is_operator': True,
+    #     }
+    # },
 }

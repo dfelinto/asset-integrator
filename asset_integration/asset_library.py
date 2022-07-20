@@ -2,6 +2,10 @@
 
 # <pep8-80 compliant>
 
+from .asset_tree import (
+    generate_asset_tree,
+)
+
 from . import data
 import bpy
 import pathlib
@@ -50,19 +54,28 @@ def get_asset_filepath(truncated_filepath) -> str:
     return ASSETS_PATH / truncated_filepath
 
 
+all_libraries = {}
+
+
 def get_all_libraries() -> dict:
     """
     Returns a nested dictionary with all the assets.
     """
-    library_merged = merge_asset_libraries((
-        data.library_furniture,
-        data.library_human_basemesh,
-        data.library_parametric_primitives,
-        data.library_hair_operators,
-        data.library_hair_operators_extra,
-        data.library_mock,
-    ))
-    return library_merged
+    if all_libraries:
+        return all_libraries
+
+    # library_merged = merge_asset_libraries((
+    #     data.library_furniture,
+    #     data.library_human_basemesh,
+    #     data.library_parametric_primitives,
+    #     data.library_hair_operators,
+    #     data.library_hair_operators_extra,
+    #     data.library_mock,
+    # ))
+
+    all_libraries.update(generate_asset_tree())
+    # all_libraries.update(library_merged)
+    return all_libraries
 
 
 def passed_rules_filter(element: dict, rules: dict) -> bool:
