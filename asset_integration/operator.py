@@ -13,8 +13,19 @@ class OBJECT_OT_add_asset_object(bpy.types.Operator):
     id_name: bpy.props.StringProperty(name="ID Name")
 
     def execute(self, context):
-        # TODO actual implementation (call other script)
-        print(self.filepath)
+
+        file_path = self.filepath
+        inner_path = 'Object'
+        asset_name = self.id_name
+
+        bpy.ops.wm.append(
+            filepath=os.path.join(file_path, inner_path, asset_name),
+            directory=os.path.join(file_path, inner_path),
+            filename=asset_name,
+            do_reuse_local_id=True,
+        )
+
+        bpy.ops.transform.translate(value=context.scene.cursor.location)
         return {'FINISHED'}
 
 
