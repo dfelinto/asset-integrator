@@ -54,18 +54,13 @@ def get_all_libraries() -> dict:
     """
     Returns a nested dictionary with all the assets.
     """
-    library_furniture = data.library_furniture
-    library_human_basemesh = data.library_human_basemesh
-    library_parametric_primitives = data.library_parametric_primitives
-    library_hair_operators = data.library_hair_operators
-    library_mock = data.library_mock
-
     library_merged = merge_asset_libraries((
-        library_furniture,
-        library_human_basemesh,
-        library_parametric_primitives,
-        library_hair_operators,
-        library_mock,
+        data.library_furniture,
+        data.library_human_basemesh,
+        data.library_parametric_primitives,
+        data.library_hair_operators,
+        data.library_hair_operators_extra,
+        data.library_mock,
     ))
     return library_merged
 
@@ -123,6 +118,7 @@ def add_menu_geometry_nodes_get() -> dict:
                                  'is_node': True,
                              })
 
+
 def operator_tools_curves_geometry_nodes_get() -> dict:
     all_libraries = get_all_libraries()
     return filter_dictionary(all_libraries,
@@ -131,6 +127,7 @@ def operator_tools_curves_geometry_nodes_get() -> dict:
                                  'subtype': 'GEOMETRY_NODES',
                                  'is_operator': True,
                              })
+
 
 def merge_dict_recursive(dict_final: dict, dict_iter: dict):
     """

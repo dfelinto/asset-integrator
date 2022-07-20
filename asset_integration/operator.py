@@ -36,7 +36,7 @@ class NODES_OT_add_asset_node(bpy.types.Operator):
                 filepath=os.path.join(file_path, inner_path, asset_name),
                 directory=os.path.join(file_path, inner_path),
                 filename=asset_name
-                )
+            )
             bpy.data.node_groups.get(self.id_name).asset_clear()
 
         bpy.ops.node.add_node(
@@ -44,8 +44,8 @@ class NODES_OT_add_asset_node(bpy.types.Operator):
             use_transform=True,
             settings=[
                 {
-                    "name":"node_tree",
-                    "value":"bpy.data.node_groups['{}']".format(self.id_name),
+                    "name": "node_tree",
+                    "value": "bpy.data.node_groups['{}']".format(self.id_name),
                 }])
 
         return {'FINISHED'}
@@ -60,7 +60,8 @@ class NODES_OT_asset_operator(bpy.types.Operator):
     id_name: bpy.props.StringProperty(name="ID Name")
 
     def execute(self, context):
-        node_groups_before = [node_group for node_group in bpy.data.node_groups]
+        node_groups_before = [
+            node_group for node_group in bpy.data.node_groups]
 
         file_path = self.filepath
         inner_path = 'NodeTree'
@@ -70,15 +71,17 @@ class NODES_OT_asset_operator(bpy.types.Operator):
             filepath=os.path.join(file_path, inner_path, asset_name),
             directory=os.path.join(file_path, inner_path),
             filename=asset_name
-            )
+        )
 
         node_groups_after = [node_group for node_group in bpy.data.node_groups]
         if len(node_groups_before) != len(node_groups_after):
-            node_group = [node_group for node_group in node_groups_after if node_group not in node_groups_before][0]
+            node_group = [
+                node_group for node_group in node_groups_after if node_group not in node_groups_before][0]
         else:
             node_group = bpy.data.node_groups.get(self.id_name)
 
-        # TODO new operator to run node_group (from Jacques Lucke)
+        # Run the curve operator
+        bpy.ops.curves.execute_node_group(node_group_name=node_group.name)
 
         # Cleanup the file afterwards
         bpy.data.node_groups.remove(node_group)
@@ -91,6 +94,7 @@ classes = (
     NODES_OT_add_asset_node,
     NODES_OT_asset_operator,
 )
+
 
 def register():
     for c in classes:

@@ -83,6 +83,17 @@ library_parametric_primitives = {
 }
 
 library_hair_operators = {
+    'Delete':
+    {
+        'Delete Hair': {
+            'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+            'type': 'NODE_TREE',
+            'subtype': 'GEOMETRY_NODES',
+            'is_modifier': False,
+            'is_node': False,
+            'is_operator': True,
+        },
+    },
     'Noise':
     {
         'Hair Noise': {
@@ -104,14 +115,6 @@ library_hair_operators = {
     },
     'Utilities':
     {
-        'Delete Hair': {
-            'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
-            'type': 'NODE_TREE',
-            'subtype': 'GEOMETRY_NODES',
-            'is_modifier': False,
-            'is_node': False,
-            'is_operator': True,
-        },
         'Hair Thickness': {
             'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
             'type': 'NODE_TREE',
@@ -142,6 +145,49 @@ library_hair_operators = {
     }
 }
 
+library_hair_operators_extra = {
+    'Delete':
+    {
+        'Delete Random': {
+            'filepath': "Geometry Nodes Utils/node_group_operator_test.blend",
+            'type': 'NODE_TREE',
+            'subtype': 'GEOMETRY_NODES',
+            'is_modifier': False,
+            'is_node': False,
+            'is_operator': True,
+        },
+        'Trim': {
+            'filepath': "Geometry Nodes Utils/node_group_operator_test.blend",
+            'type': 'NODE_TREE',
+            'subtype': 'GEOMETRY_NODES',
+            'is_modifier': False,
+            'is_node': False,
+            'is_operator': True,
+        },
+    },
+    'Noise':
+    {
+        'Add Noise': {
+            'filepath': "Geometry Nodes Utils/node_group_operator_test.blend",
+            'type': 'NODE_TREE',
+            'subtype': 'GEOMETRY_NODES',
+            'is_modifier': False,
+            'is_node': False,
+            'is_operator': True,
+        },
+    },
+    'Utilities':
+    {
+        'Set Radius': {
+            'filepath': "Geometry Nodes Utils/node_group_operator_test.blend",
+            'type': 'NODE_TREE',
+            'subtype': 'GEOMETRY_NODES',
+            'is_modifier': False,
+            'is_node': False,
+            'is_operator': True,
+        },
+    },
+}
 
 library_mock = {
     # 'Attribute':
