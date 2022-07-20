@@ -26,8 +26,14 @@ class NODES_OT_add_asset_node(bpy.types.Operator):
     filepath: bpy.props.StringProperty(name="Filepath")
     id_name: bpy.props.StringProperty(name="ID Name")
 
-    def execute(self, context):
-        if self.id_name not in bpy.data.node_groups:
+    def invoke(self, context, events):
+        node_group = bpy.data.node_groups.get(self.id_name)
+
+        # Mimic Append (Reuse Data) - check name and library filepath.
+        if not (node_group and node_group.library and node_group.library.filepath == self.filepath):
+            node_groups_before = [
+                node_group for node_group in bpy.data.node_groups]
+
             file_path = self.filepath
             inner_path = 'NodeTree'
             asset_name = self.id_name
@@ -35,9 +41,22 @@ class NODES_OT_add_asset_node(bpy.types.Operator):
             bpy.ops.wm.append(
                 filepath=os.path.join(file_path, inner_path, asset_name),
                 directory=os.path.join(file_path, inner_path),
-                filename=asset_name
+                filename=asset_name,
+                do_reuse_local_id=True,
             )
-            bpy.data.node_groups.get(self.id_name).asset_clear()
+
+            node_groups_after = [
+                node_group for node_group in bpy.data.node_groups]
+
+            node_groups_diff = [
+                node_group for node_group in node_groups_after if node_group not in node_groups_before]
+
+            if node_groups_diff:
+                node_group = node_groups_diff[0]
+                node_group.asset_clear()
+            else:
+                # Nothing to do, it means the data-block was there already, but appended.
+                pass
 
         bpy.ops.node.add_node(
             type="GeometryNodeGroup",
@@ -45,7 +64,7 @@ class NODES_OT_add_asset_node(bpy.types.Operator):
             settings=[
                 {
                     "name": "node_tree",
-                    "value": "bpy.data.node_groups['{}']".format(self.id_name),
+                    "value": "bpy.data.node_groups['{}']".format(node_group.name),
                 }])
 
         return {'FINISHED'}
