@@ -26,7 +26,7 @@ class NODES_OT_add_asset_node(bpy.types.Operator):
     filepath: bpy.props.StringProperty(name="Filepath")
     id_name: bpy.props.StringProperty(name="ID Name")
 
-    def invoke(self, context, events):
+    def execute(self, context):
         node_group = bpy.data.node_groups.get(self.id_name)
 
         # Mimic Append (Reuse Data) - check name and library filepath.
@@ -58,7 +58,8 @@ class NODES_OT_add_asset_node(bpy.types.Operator):
                 # Nothing to do, it means the data-block was there already, but appended.
                 pass
 
-        bpy.ops.node.add_node(
+        return bpy.ops.node.add_node(
+            'INVOKE_DEFAULT',
             type="GeometryNodeGroup",
             use_transform=True,
             settings=[
@@ -66,8 +67,6 @@ class NODES_OT_add_asset_node(bpy.types.Operator):
                     "name": "node_tree",
                     "value": "bpy.data.node_groups['{}']".format(node_group.name),
                 }])
-
-        return {'FINISHED'}
 
 
 class NODES_OT_asset_operator(bpy.types.Operator):
