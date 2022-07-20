@@ -13,7 +13,6 @@ from .asset_library import (
 from .operator import (
     OBJECT_OT_add_asset_object,
     NODES_OT_add_asset_node,
-    NODES_OT_asset_operator,
 )
 
 import bpy
@@ -31,9 +30,15 @@ class MenuItem:
 
 
 def set_operator_properties(props, name: str, asset: dict):
-    props.id_name = name
-    props.filepath = str(get_asset_filepath(asset['filepath']))
-    props.description = asset.get('description', '')
+    if hasattr(props, 'id_name'):
+        props.id_name = name
+        props.filepath = str(get_asset_filepath(asset['filepath']))
+        props.description = asset.get('description', '')
+
+    else:
+        props.node_group_name = name
+        props.asset_file_path = str(get_asset_filepath(asset['filepath']))
+        props.asset_description = asset.get('description', '')
 
 
 def custom_add_menu(elements: list, poll_callback, operator: str):
@@ -156,7 +161,7 @@ def populate_geometry_nodes_tools():
     populate_menu(menus, bpy.types.VIEW3D_MT_editor_menus,
                   content,
                   geometry_nodes_curve_operators_callback,
-                  NODES_OT_asset_operator.bl_idname)
+                  'CURVES_OT_execute_node_group')
 
 
 CONTEXT_ID = "dynamic_menu_id"

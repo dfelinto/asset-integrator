@@ -86,46 +86,9 @@ class NODES_OT_add_asset_node(bpy.types.Operator, add_asset):
                 }])
 
 
-class NODES_OT_asset_operator(bpy.types.Operator, add_asset):
-    """Run node group as operator"""
-    bl_idname = "nodes.add_asset_operator"
-    bl_label = "Add Asset Operator"
-
-    def execute(self, context):
-        node_groups_before = [
-            node_group for node_group in bpy.data.node_groups]
-
-        file_path = self.filepath
-        inner_path = 'NodeTree'
-        asset_name = self.id_name
-
-        bpy.ops.wm.append(
-            filepath=os.path.join(file_path, inner_path, asset_name),
-            directory=os.path.join(file_path, inner_path),
-            filename=asset_name,
-            do_reuse_local_id=True,
-        )
-
-        node_groups_after = [node_group for node_group in bpy.data.node_groups]
-        if len(node_groups_before) != len(node_groups_after):
-            node_group = [
-                node_group for node_group in node_groups_after if node_group not in node_groups_before][0]
-        else:
-            node_group = bpy.data.node_groups.get(self.id_name)
-
-        # Run the curve operator
-        bpy.ops.curves.execute_node_group(node_group_name=node_group.name)
-
-        # Cleanup the file afterwards
-        bpy.data.node_groups.remove(node_group)
-
-        return {'FINISHED'}
-
-
 classes = (
     OBJECT_OT_add_asset_object,
     NODES_OT_add_asset_node,
-    NODES_OT_asset_operator,
 )
 
 
