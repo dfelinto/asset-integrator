@@ -58,6 +58,8 @@ class NODES_OT_add_asset_node(bpy.types.Operator):
                 # Nothing to do, it means the data-block was there already, but appended.
                 pass
 
+        # Ideally we should unappend the asset if the operator got cancelled.
+        # This is not possible at the moment.
         return bpy.ops.node.add_node(
             'INVOKE_DEFAULT',
             type="GeometryNodeGroup",
