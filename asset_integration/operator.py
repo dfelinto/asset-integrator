@@ -70,7 +70,8 @@ class NODES_OT_asset_operator(bpy.types.Operator):
         bpy.ops.wm.append(
             filepath=os.path.join(file_path, inner_path, asset_name),
             directory=os.path.join(file_path, inner_path),
-            filename=asset_name
+            filename=asset_name,
+            do_reuse_local_id=True,
         )
 
         node_groups_after = [node_group for node_group in bpy.data.node_groups]
