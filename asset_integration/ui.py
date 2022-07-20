@@ -35,8 +35,11 @@ def set_operator_properties(props, name: str, asset: dict):
     props.filepath = str(get_asset_filepath(asset['filepath']))
 
 
-def custom_add_menu(elements: list, operator: str):
+def custom_add_menu(elements: list, poll_callback, operator: str):
     def function_template(self, context):
+        if not poll_callback(context):
+            return
+
         layout = self.layout
         layout.separator()
         for element in elements:
@@ -54,15 +57,15 @@ def custom_add_menu(elements: list, operator: str):
     return function_template
 
 
-def populate_menu_doit(menu, content: dict, operator: str):
+def populate_menu_doit(menu, content: dict, poll_callback, operator: str):
     elements = []
     for key in sorted(content.keys()):
         value = content[key]
         elements.append(MenuItem(key, value))
-    menu.append(custom_add_menu(elements, operator))
+    menu.append(custom_add_menu(elements, poll_callback, operator))
 
 
-def populate_menu(menus: list, main_menu: bpy.types.Menu, content: dict, operator_name: str):
+def populate_menu(menus: list, main_menu: bpy.types.Menu, content: dict, poll_callback, operator_name: str):
     """
     Populates a menu dynamically.
     """
@@ -75,11 +78,11 @@ def populate_menu(menus: list, main_menu: bpy.types.Menu, content: dict, operato
         menu = menus_lookup.get(key)
 
         if is_catalog(value) and menu:
-            populate_menu_doit(menu, value, operator_name)
+            populate_menu_doit(menu, value, poll_callback, operator_name)
         else:
             elements[key] = value
 
-    populate_menu_doit(main_menu, elements, operator_name)
+    populate_menu_doit(main_menu, elements, poll_callback, operator_name)
 
 
 def populate_object_add_menu():
@@ -101,7 +104,9 @@ def populate_object_add_menu():
     )
     content = add_menu_objects_collections_get()
     populate_menu(menus, bpy.types.VIEW3D_MT_add,
-                  content, OBJECT_OT_add_asset_object.bl_idname)
+                  content,
+                  default_poll_callback,
+                  OBJECT_OT_add_asset_object.bl_idname)
 
 
 def populate_geometry_nodes_add_menu():
@@ -131,7 +136,9 @@ def populate_geometry_nodes_add_menu():
     )
     content = add_menu_geometry_nodes_get()
     populate_menu(menus, bpy.types.NODE_MT_add,
-                  content, NODES_OT_add_asset_node.bl_idname)
+                  content,
+                  geometry_nodes_node_editor_poll_callback,
+                  NODES_OT_add_asset_node.bl_idname)
 
 
 def populate_geometry_nodes_tools():
@@ -145,7 +152,9 @@ def populate_geometry_nodes_tools():
     )
     content = operator_tools_curves_geometry_nodes_get()
     populate_menu(menus, bpy.types.VIEW3D_MT_editor_menus,
-                  content, NODES_OT_asset_operator.bl_idname)
+                  content,
+                  default_poll_callback,
+                  NODES_OT_asset_operator.bl_idname)
 
 
 CONTEXT_ID = "dynamic_menu_id"
@@ -203,6 +212,34 @@ class ASSET_MT_DynamicMenu(bpy.types.Menu):
                 ASSET_MT_DynamicMenu._parents[row] = (
                     parent_id, MenuPayload(value, operator))
                 row.menu(ASSET_MT_DynamicMenu.bl_idname, text=key)
+
+
+def default_poll_callback(context):
+    return True
+
+
+def node_editor_poll_callback(context, tree_type: str):
+    space_data = context.space_data
+
+    if space_data.type != 'NODE_EDITOR':
+        return False
+
+    if not space_data.node_tree:
+        return False
+
+    return context.space_data and context.space_data.tree_type == tree_type
+
+
+def geometry_nodes_node_editor_poll_callback(context):
+    return node_editor_poll_callback(context, 'GeometryNodeTree')
+
+
+def compositor_node_editor_poll_callback(context):
+    return node_editor_poll_callback(context, 'CompositorNodeTree')
+
+
+def shader_node_editor_poll_callback(context):
+    return node_editor_poll_callback(context, 'ShaderNodeTree')
 
 
 def register():
