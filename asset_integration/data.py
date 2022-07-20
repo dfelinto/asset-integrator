@@ -57,6 +57,7 @@ library_parametric_primitives = {
             'Cone': {
                 'filepath': "Parametric Primitives/Parametric Primitives.blend",
                 'type': 'OBJECT',
+                'description': 'Parametric Cone'
             },
             'Cube': {
                 'filepath': "Parametric Primitives/Parametric Primitives.blend",
@@ -87,10 +88,11 @@ library_hair_operators = {
     {
         'Delete Hair': {
             'filepath': "Geometry Nodes Utils/einar_hair_tools.blend",
+            'description': 'Delete hair based on selection',
             'type': 'NODE_TREE',
             'subtype': 'GEOMETRY_NODES',
             'is_modifier': False,
-            'is_node': False,
+            'is_node': True,
             'is_operator': True,
         },
     },

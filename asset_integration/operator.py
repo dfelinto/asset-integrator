@@ -5,12 +5,17 @@ import os
 
 
 class OBJECT_OT_add_asset_object(bpy.types.Operator):
-    """Tooltip"""
+    """Add asset object"""
     bl_idname = "object.add_asset_object"
     bl_label = "Add Asset Object"
 
     filepath: bpy.props.StringProperty(name="Filepath")
     id_name: bpy.props.StringProperty(name="ID Name")
+    description: bpy.props.StringProperty(name="Description")
+
+    @classmethod
+    def description(cls, context, properties):
+        return properties.description
 
     def execute(self, context):
 
@@ -36,6 +41,11 @@ class NODES_OT_add_asset_node(bpy.types.Operator):
 
     filepath: bpy.props.StringProperty(name="Filepath")
     id_name: bpy.props.StringProperty(name="ID Name")
+    description: bpy.props.StringProperty(name="Description")
+
+    @classmethod
+    def description(cls, context, properties):
+        return properties.description
 
     def execute(self, context):
         node_group = bpy.data.node_groups.get(self.id_name)
@@ -89,6 +99,11 @@ class NODES_OT_asset_operator(bpy.types.Operator):
 
     filepath: bpy.props.StringProperty(name="Filepath")
     id_name: bpy.props.StringProperty(name="ID Name")
+    description: bpy.props.StringProperty(name="Description")
+
+    @classmethod
+    def description(cls, context, properties):
+        return properties.description
 
     def execute(self, context):
         node_groups_before = [

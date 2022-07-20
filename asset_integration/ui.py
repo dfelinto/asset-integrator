@@ -33,6 +33,7 @@ class MenuItem:
 def set_operator_properties(props, name: str, asset: dict):
     props.id_name = name
     props.filepath = str(get_asset_filepath(asset['filepath']))
+    props.description = asset.get('description', '')
 
 
 def custom_add_menu(elements: list, poll_callback, operator: str):
@@ -50,7 +51,8 @@ def custom_add_menu(elements: list, poll_callback, operator: str):
                     None, MenuPayload(element._asset, operator))
                 row.menu(ASSET_MT_DynamicMenu.bl_idname, text=element._name)
             else:
-                operator_props = layout.operator(operator, text=element._name)
+                operator_props = layout.operator(
+                    operator, text=element._name)
                 set_operator_properties(
                     operator_props, element._name, element._asset)
 
