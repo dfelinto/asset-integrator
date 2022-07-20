@@ -155,7 +155,7 @@ def populate_geometry_nodes_tools():
     content = operator_tools_curves_geometry_nodes_get()
     populate_menu(menus, bpy.types.VIEW3D_MT_editor_menus,
                   content,
-                  default_poll_callback,
+                  geometry_nodes_curve_operators_callback,
                   NODES_OT_asset_operator.bl_idname)
 
 
@@ -217,6 +217,25 @@ class ASSET_MT_DynamicMenu(bpy.types.Menu):
 
 
 def default_poll_callback(context):
+    return True
+
+
+def geometry_nodes_curve_operators_callback(context):
+    ob = context.active_object
+    if not ob:
+        return False
+
+    if ob.type != 'CURVES':
+        return False
+
+    # Run for Edit and Sculpt modes
+    if ob.mode == 'OBJECT':
+        return False
+
+    # Don't support library overrides for now
+    if ob.library:
+        return False
+
     return True
 
 
