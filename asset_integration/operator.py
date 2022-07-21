@@ -4,6 +4,12 @@ import bpy
 import os
 
 
+# Technically we don't need / shouldn't inherit bpy.types.Operator here,
+# since only actual operators should do that.
+#
+# However without it pytest throws the following error:
+# TypeError: metaclass conflict: the metaclass of a derived class must be
+# a (non-strict) subclass of the metaclasses of all its bases
 class add_asset(bpy.types.Operator):
     filepath: bpy.props.StringProperty(name="Filepath")
     id_name: bpy.props.StringProperty(name="ID Name")
