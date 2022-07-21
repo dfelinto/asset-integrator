@@ -2,6 +2,8 @@ from asset_integration import asset_library
 import bpy
 
 
+UNASSIGNED = 'Unassigned'
+
 def generate_asset_tree(asset_tree={}) -> dict:
     """
     Return dictionary of catalogs and assets
@@ -33,8 +35,37 @@ def generate_asset_tree(asset_tree={}) -> dict:
     return asset_tree
 
 
+def catalog_read(filepath: str, catalog_tree: dict, lookup: dict):
+    """
+    Read catalog file and populate asset_tree with empty dictionary.
+    """
+    with open(filepath, 'r') as file:
+        for line in file.readlines():
+            # Crude parsing of "UUID:catalog/path/for/assets:simple catalog name"
+            if len(line) < 8:
+                continue
+            if line.startswith("#") or line.startswith(" ") or line.startswith("VERSION"):
+                continue
+            uuid, catalog_path, catalog_simple_name = line.split(':')
+            catalog_parts = catalog_path.split('/')
+
+            catalog_parent = catalog_tree
+            for catalog_name in catalog_parts:
+                catalog = catalog_parent.get(catalog_name)
+                if catalog:
+                    pass
+                else:
+                    lookup[uuid] = catalog = catalog_parent[catalog_name] = {}
+                catalog_parent = catalog
+
+
 def get_data_from_library(filepath: str) -> dict:
     import os
+
+    asset_tree = {UNASSIGNED: {}}
+    catalogs_lookup = {}
+    catalog_filepath = os.path.join(filepath, "blender_assets.cats.txt")
+    catalog_read(catalog_filepath, asset_tree, catalogs_lookup)
 
     blendfiles = []
     for path, subdirs, files in os.walk(filepath):
@@ -44,15 +75,42 @@ def get_data_from_library(filepath: str) -> dict:
 
     blend_data_array = []
     for blend_filepath in blendfiles:
-        blend_data = get_data_from_blendfile(blend_filepath)
+        blend_data = get_data_from_blendfile(blend_filepath, asset_tree, catalogs_lookup)
         blend_data_array.append(blend_data)
 
     return asset_library.merge_asset_libraries(blend_data_array)
 
 
-def get_data_from_blendfile(filepath: str) -> dict:
+def get_uuid(ob)-> str:
+    """
+    Format UUID based on BLI_uuid_format
+    """
+    time_low = ob.get((b'id', b'asset_data', b'catalog_id', b'time_low'))
+    time_mid = ob.get((b'id', b'asset_data', b'catalog_id', b'time_mid'))
+    time_hi_and_version = ob.get((b'id', b'asset_data', b'catalog_id', b'time_hi_and_version'))
+    clock_seq_hi_and_reserved = ob.get((b'id', b'asset_data', b'catalog_id', b'clock_seq_hi_and_reserved'))
+    clock_seq_low = ob.get((b'id', b'asset_data', b'catalog_id', b'clock_seq_low'))
+    time_mid = ob.get((b'id', b'asset_data', b'catalog_id', b'time_mid'))
+    node = ob.get((b'id', b'asset_data', b'catalog_id', b'node'))
+    uuid = "%8x-%4hx-%4hx-%2hx%2hx-%2hx%2hx%2hx%2hx%2hx%2hx" % (
+        time_low,
+        time_mid,
+        time_hi_and_version,
+        clock_seq_hi_and_reserved,
+        clock_seq_low,
+        node[0],
+        node[1],
+        node[2],
+        node[3],
+        node[4],
+        node[5],
+        )
+    return uuid
+
+
+def get_data_from_blendfile(filepath: str, asset_tree: dict, catalogs_lookup: dict) -> dict:
     from . import blendfile
-    print(filepath)
+    catalog_unassigned = asset_tree.get(UNASSIGNED)
 
     data = {}
     with blendfile.open_blend(filepath) as bf:
@@ -63,11 +121,18 @@ def get_data_from_blendfile(filepath: str) -> dict:
             if not asset_data:
                 continue
 
+            ob_name = ob.get((b'id', b'name'))[2:]
             catalog_name = asset_data.get(b'catalog_simple_name')
-            description = asset_data.get_pointer(b'description')
+            # TODO get proper description
+            description = '' # asset_data.get_pointer(b'description')
+            uuid = get_uuid(ob)
 
-            # TODO add description too
-            #print("catalog", catalog_name)
+            catalog = catalogs_lookup.get(uuid, catalog_unassigned)
+            catalog[ob_name] : {
+                'filepath': filepath,
+                'description': description,
+                'type': 'OBJECT',
+            }
 
         nodes = bf.find_blocks_from_code(b'NT')
         for node in nodes:
@@ -76,10 +141,6 @@ def get_data_from_blendfile(filepath: str) -> dict:
             if not asset_data:
                 continue
 
-            catalog_name = asset_data.get(b'catalog_simple_name')
-            print("catalog", catalog_name)
-
-        print(objects)
-        print(filepath)
+            # TODO: do nodes too
 
     return {}

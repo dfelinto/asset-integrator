@@ -22,3 +22,4 @@ sys.modules["bpy_extras.object_utils"] = unittest.mock.MagicMock()
 sys.modules["bpy_extras.object_utils.AddObjectHelper"] = MockOperator
 
 from .test_asset_library import *
+from .test_asset_tree import *
