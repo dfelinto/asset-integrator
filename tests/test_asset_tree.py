@@ -107,6 +107,67 @@ class TestCompleteFile(unittest.TestCase):
             filter_dictionary(asset_tree_result, {'type': 'OBJECT'}),
             filter_dictionary(asset_tree, {'type': 'OBJECT'}))
 
+    def test_basemesh_file(self):
+        filepath = str(ASSETS_PATH / 'Human Basemeshes')
+        blend_filepath = str(ASSETS_PATH / 'Human Basemeshes' / 'human_base_meshes.blend')
+        asset_tree = get_data_from_library(filepath)
+
+        asset_tree_result = {
+            'Mesh':
+            {
+                'Human Basemesh':
+                {
+                    'Eye': {
+                        'filepath': blend_filepath,
+                        'type': 'OBJECT',
+                        'description': '',
+                    },
+                    'Foot': {
+                        'filepath': blend_filepath,
+                        'type': 'OBJECT',
+                        'description': '',
+                    },
+                    'Hand': {
+                        'filepath': blend_filepath,
+                        'type': 'OBJECT',
+                        'description': '',
+                    },
+                    'Jaw': {
+                        'filepath': blend_filepath,
+                        'type': 'OBJECT',
+                        'description': '',
+                    },
+                    'Stylized Female': {
+                        'filepath': blend_filepath,
+                        'type': 'OBJECT',
+                        'description': '',
+                    },
+                    'Stylized Head': {
+                        'filepath': blend_filepath,
+                        'type': 'OBJECT',
+                        'description': '',
+                    },
+                    'Stylized Male': {
+                        'filepath': blend_filepath,
+                        'type': 'OBJECT',
+                        'description': '',
+                    },
+                },
+            },
+            'Unassigned': {
+            }
+        }
+
+        print('asset_tree', asset_tree)
+        print('asset_tree_result', asset_tree_result)
+
+        self.assertDictEqual(asset_tree_result, asset_tree)
+
+        self.assertDictEqual(
+            filter_dictionary(asset_tree_result, {'type': 'OBJECT'}),
+            filter_dictionary(asset_tree, {'type': 'OBJECT'}))
+
+
 class TestUUID(unittest.TestCase):
     def test_uuid_a(self):
         """
