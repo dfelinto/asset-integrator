@@ -4,6 +4,7 @@ import bpy
 
 UNASSIGNED = 'Unassigned'
 
+
 def generate_asset_tree(asset_tree={}) -> dict:
     """
     Return dictionary of catalogs and assets
@@ -84,12 +85,12 @@ def get_data_from_blendfile(filepath: str, asset_tree: dict, catalogs_lookup: di
     catalog_unassigned = asset_tree.get(UNASSIGNED)
 
     node_tree_types = {
-        -2: 'UNDEFINED', # NTREE_UNDEFINED
-        -1: 'CUSTOM', # NTREE_CUSTOM
-        0: 'SHADER', # NTREE_SHADER
-        1: 'COMPOSITING', # NTREE_COMPOSIT
-        2: 'TEXTURE', # NTREE_TEXTURE
-        3: 'GEOMETRY_NODES', # NTREE_GEOMETRY
+        -2: 'UNDEFINED',  # NTREE_UNDEFINED
+        -1: 'CUSTOM',  # NTREE_CUSTOM
+        0: 'SHADER',  # NTREE_SHADER
+        1: 'COMPOSITING',  # NTREE_COMPOSIT
+        2: 'TEXTURE',  # NTREE_TEXTURE
+        3: 'GEOMETRY_NODES',  # NTREE_GEOMETRY
     }
 
     with blendfile.open_blend(filepath) as bf:
@@ -102,7 +103,7 @@ def get_data_from_blendfile(filepath: str, asset_tree: dict, catalogs_lookup: di
 
             ob_name = ob.get((b'id', b'name'))[2:]
             # TODO get proper description
-            description = '' # asset_data.get_pointer(b'description')
+            description = ''  # asset_data.get_pointer(b'description')
             uuid = get_uuid_from_asset_data(asset_data)
 
             catalog = catalogs_lookup.get(uuid, catalog_unassigned)
@@ -120,12 +121,12 @@ def get_data_from_blendfile(filepath: str, asset_tree: dict, catalogs_lookup: di
                 continue
 
             node_tree_type = node_tree.get(b'type')
-            if node_tree_type != 3: #GEOMETRY
+            if node_tree_type != 3:  # GEOMETRY
                 continue
 
             node_tree_name = node_tree.get((b'id', b'name'))[2:]
             # TODO get proper description
-            description = '' # asset_data.get_pointer(b'description')
+            description = ''  # asset_data.get_pointer(b'description')
             uuid = get_uuid_from_asset_data(asset_data)
 
             catalog = catalogs_lookup.get(uuid, catalog_unassigned)
@@ -144,19 +145,19 @@ def get_data_from_blendfile(filepath: str, asset_tree: dict, catalogs_lookup: di
 
                 catalog[node_tree_name].update(
                     {
-                    'is_node': is_node,
-                    'is_operator': is_operator,
+                        'is_node': is_node,
+                        'is_operator': is_operator,
                     }
                 )
 
 
 def format_uuid(
-    time_low,
-    time_mid,
-    time_hi_and_version,
-    clock_seq_hi_and_reserved,
-    clock_seq_low,
-    node: list) -> str:
+        time_low,
+        time_mid,
+        time_hi_and_version,
+        clock_seq_hi_and_reserved,
+        clock_seq_low,
+        node: list) -> str:
     """
     Format UUID based on BLI_uuid_format
     """
@@ -172,7 +173,7 @@ def format_uuid(
         node[3],
         node[4],
         node[5],
-        )
+    )
     return uuid
 
 
@@ -198,14 +199,16 @@ def uint_16_t(value):
     return value
 
 
-def get_uuid_from_asset_data(asset_data)-> str:
+def get_uuid_from_asset_data(asset_data) -> str:
     """
     Get UUID from object in blendfile
     """
     time_low = uint_32_t(asset_data.get((b'catalog_id', b'time_low')))
     time_mid = uint_16_t(asset_data.get((b'catalog_id', b'time_mid')))
-    time_hi_and_version = uint_16_t(asset_data.get((b'catalog_id', b'time_hi_and_version')))
-    clock_seq_hi_and_reserved = asset_data.get((b'catalog_id', b'clock_seq_hi_and_reserved'))
+    time_hi_and_version = uint_16_t(asset_data.get(
+        (b'catalog_id', b'time_hi_and_version')))
+    clock_seq_hi_and_reserved = asset_data.get(
+        (b'catalog_id', b'clock_seq_hi_and_reserved'))
     clock_seq_low = asset_data.get((b'catalog_id', b'clock_seq_low'))
     node = asset_data.get((b'catalog_id', b'node'))
     uuid = format_uuid(
@@ -215,5 +218,5 @@ def get_uuid_from_asset_data(asset_data)-> str:
         clock_seq_hi_and_reserved,
         clock_seq_low,
         node
-        )
+    )
     return uuid
