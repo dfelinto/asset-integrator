@@ -17,7 +17,7 @@ import pathlib
 
 
 BASE_PATH = pathlib.Path(__file__).parent.absolute()
-ASSETS_PATH = BASE_PATH / ".." / "asset_integration" / "asset_libraries"
+ASSETS_PATH = BASE_PATH / "asset_libraries"
 
 
 class TestCatalogParser(unittest.TestCase):
