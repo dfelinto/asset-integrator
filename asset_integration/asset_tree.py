@@ -59,16 +59,16 @@ def catalog_read(filepath: str, catalog_tree: dict, lookup: dict):
                 catalog_parent = catalog
 
 
-def get_data_from_library(filepath: str) -> dict:
+def get_data_from_library(library_path: str) -> dict:
     import os
 
     asset_tree = {UNASSIGNED: {}}
     catalogs_lookup = {}
-    catalog_filepath = os.path.join(filepath, "blender_assets.cats.txt")
+    catalog_filepath = os.path.join(library_path, "blender_assets.cats.txt")
     catalog_read(catalog_filepath, asset_tree, catalogs_lookup)
 
     blendfiles = []
-    for path, subdirs, files in os.walk(filepath):
+    for path, subdirs, files in os.walk(library_path):
         for name in files:
             if name.endswith('.blend'):
                 blendfiles.append(os.path.join(path, name))
