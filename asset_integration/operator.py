@@ -4,7 +4,7 @@ import bpy
 import os
 
 
-class add_asset():
+class add_asset(bpy.types.Operator):
     filepath: bpy.props.StringProperty(name="Filepath")
     id_name: bpy.props.StringProperty(name="ID Name")
     description: bpy.props.StringProperty(name="Description")
@@ -14,7 +14,7 @@ class add_asset():
         return properties.description
 
 
-class OBJECT_OT_add_asset_object(bpy.types.Operator, add_asset):
+class OBJECT_OT_add_asset_object(add_asset, bpy.types.Operator):
     """Add asset object"""
     bl_idname = "object.add_asset_object"
     bl_label = "Add Asset Object"
@@ -44,7 +44,7 @@ class OBJECT_OT_add_asset_object(bpy.types.Operator, add_asset):
         return {'FINISHED'}
 
 
-class NODES_OT_add_asset_node(bpy.types.Operator, add_asset):
+class NODES_OT_add_asset_node(add_asset, bpy.types.Operator):
     """Add node group node"""
     bl_idname = "nodes.add_asset_node"
     bl_label = "Add Asset Node"
