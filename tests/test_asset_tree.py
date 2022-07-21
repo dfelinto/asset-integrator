@@ -112,17 +112,16 @@ class TestCompleteFile(unittest.TestCase):
             filter_dictionary(asset_tree, {'type': 'OBJECT'}))
 
 class TestUUID(unittest.TestCase):
-    def uuid_a(self):
+    def test_uuid_a(self):
         # test simply format_uuid()
         pass
 
-    def uuid_b(self):
+    def test_uuid_b(self):
         from asset_integration import blendfile
 
-        filepath = str(ASSETS_PATH / 'Furniture' / 'furniture.blend' )
-        asset_tree = get_data_from_library(filepath)
+        blend_filepath = str(ASSETS_PATH / 'Furniture' / 'furniture.blend')
 
-        with blendfile.open_blend(filepath) as bf:
+        with blendfile.open_blend(blend_filepath) as bf:
             objects = bf.find_blocks_from_code(b'OB')
             for ob in objects:
                 asset_data = ob.get_pointer((b'id', b'asset_data'))
