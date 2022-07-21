@@ -176,33 +176,33 @@ class TestCompleteFile(unittest.TestCase):
             {
                 'Parametric': {
                     'Cone': {
-                        'filepath': "Parametric Primitives/Parametric Primitives.blend",
+                        'filepath': blend_filepath,
                         'type': 'OBJECT',
                         'description': ''
                     },
                     'Cube': {
-                        'filepath': "Parametric Primitives/Parametric Primitives.blend",
+                        'filepath': blend_filepath,
                         'type': 'OBJECT',
                         'description': ''
 
                     },
                     'Cylinder': {
-                        'filepath': "Parametric Primitives/Parametric Primitives.blend",
+                        'filepath': blend_filepath,
                         'type': 'OBJECT',
                         'description': ''
                     },
                     'Grid': {
-                        'filepath': "Parametric Primitives/Parametric Primitives.blend",
+                        'filepath': blend_filepath,
                         'type': 'OBJECT',
                         'description': ''
                     },
                     'Icosphere': {
-                        'filepath': "Parametric Primitives/Parametric Primitives.blend",
+                        'filepath': blend_filepath,
                         'type': 'OBJECT',
                         'description': ''
                     },
                     'UV Sphere': {
-                        'filepath': "Parametric Primitives/Parametric Primitives.blend",
+                        'filepath': blend_filepath,
                         'type': 'OBJECT',
                         'description': ''
                     },
