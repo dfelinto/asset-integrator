@@ -39,16 +39,16 @@ VERSION 1
             catalog_lookup = {}
             catalog_read(file.name, catalog_tree, catalog_lookup)
 
-            catalog_tree_result = {
+            catalog_tree_expected = {
                 'Furniture': {},
             }
 
-            catalog_lookup_result = {
-                '7ad4efc5-64a3-4bf8-b542-14fab41fe8f5': catalog_tree_result['Furniture'],
+            catalog_lookup_expected = {
+                '7ad4efc5-64a3-4bf8-b542-14fab41fe8f5': catalog_tree_expected['Furniture'],
             }
 
-            self.assertDictEqual(catalog_tree_result, catalog_tree_result)
-            self.assertDictEqual(catalog_tree_result, catalog_tree_result)
+            self.assertDictEqual(catalog_tree, catalog_tree_expected)
+            self.assertDictEqual(catalog_lookup, catalog_lookup_expected)
 
     def test_catalog_b(self):
         with tempfile.NamedTemporaryFile(mode='w') as file:
@@ -70,7 +70,7 @@ e272791e-c4a8-4e8a-b20b-7adc6e97af48:Mesh/Parametric:Mesh-Parametric
             catalog_lookup = {}
             catalog_read(file.name, catalog_tree, catalog_lookup)
 
-            catalog_tree_result = {
+            catalog_tree_expected = {
                 'Mesh':
                     {
                         'Parametric': {},
@@ -78,14 +78,14 @@ e272791e-c4a8-4e8a-b20b-7adc6e97af48:Mesh/Parametric:Mesh-Parametric
                 'Furniture': {},
             }
 
-            catalog_lookup_result = {
-                '14937f2a-4b34-42fd-bbfb-f7face8b6954': catalog_tree_result['Mesh'],
-                'e272791e-c4a8-4e8a-b20b-7adc6e97af48': catalog_tree_result['Mesh']['Parametric'],
-                '7ad4efc5-64a3-4bf8-b542-14fab41fe8f5': catalog_tree_result['Furniture'],
+            catalog_lookup_expected = {
+                '14937f2a-4b34-42fd-bbfb-f7face8b6954': catalog_tree_expected['Mesh'],
+                'e272791e-c4a8-4e8a-b20b-7adc6e97af48': catalog_tree_expected['Mesh']['Parametric'],
+                '7ad4efc5-64a3-4bf8-b542-14fab41fe8f5': catalog_tree_expected['Furniture'],
             }
 
-            self.assertDictEqual(catalog_tree_result, catalog_tree_result)
-            self.assertDictEqual(catalog_tree_result, catalog_tree_result)
+            self.assertDictEqual(catalog_tree, catalog_tree_expected)
+            self.assertDictEqual(catalog_lookup, catalog_lookup_expected)
 
 
 class TestCompleteFile(unittest.TestCase):
@@ -94,7 +94,7 @@ class TestCompleteFile(unittest.TestCase):
         blend_filepath = str(ASSETS_PATH / 'Furniture' / 'furniture.blend')
         asset_tree = get_data_from_library(filepath)
 
-        asset_tree_result = {
+        asset_tree_expected = {
             'Furniture': {
                 'Chair': {
                     'filepath': blend_filepath,
@@ -106,11 +106,11 @@ class TestCompleteFile(unittest.TestCase):
             }
         }
 
-        self.assertDictEqual(asset_tree_result, asset_tree)
+        self.assertDictEqual(asset_tree, asset_tree_expected)
 
         self.assertDictEqual(
-            filter_dictionary(asset_tree_result, {'type': 'OBJECT'}),
-            filter_dictionary(asset_tree, {'type': 'OBJECT'}))
+            filter_dictionary(asset_tree, {'type': 'OBJECT'}),
+            filter_dictionary(asset_tree_expected, {'type': 'OBJECT'}))
 
     def test_basemesh_file(self):
         filepath = str(ASSETS_PATH / 'Human Basemeshes')
@@ -118,7 +118,7 @@ class TestCompleteFile(unittest.TestCase):
             ASSETS_PATH / 'Human Basemeshes' / 'human_base_meshes.blend')
         asset_tree = get_data_from_library(filepath)
 
-        asset_tree_result = {
+        asset_tree_expected = {
             'Mesh':
             {
                 'Human Basemesh':
@@ -164,11 +164,12 @@ class TestCompleteFile(unittest.TestCase):
             }
         }
 
-        self.assertDictEqual(asset_tree_result, asset_tree)
+        self.assertDictEqual(asset_tree, asset_tree_expected)
 
         self.assertDictEqual(
-            filter_dictionary(asset_tree_result, {'type': 'OBJECT'}),
-            filter_dictionary(asset_tree, {'type': 'OBJECT'}))
+            filter_dictionary(asset_tree, {'type': 'OBJECT'}),
+            filter_dictionary(asset_tree_expected, {'type': 'OBJECT'}),
+        )
 
     def test_parametric_primitives_file(self):
         filepath = str(ASSETS_PATH / 'Parametric Primitives')
@@ -176,7 +177,7 @@ class TestCompleteFile(unittest.TestCase):
             ASSETS_PATH / 'Parametric Primitives' / 'Parametric Primitives.blend')
         asset_tree = get_data_from_library(filepath)
 
-        asset_tree_result = {
+        asset_tree_expected = {
             'Mesh':
             {
                 'Parametric': {
@@ -217,11 +218,12 @@ class TestCompleteFile(unittest.TestCase):
             }
         }
 
-        self.assertDictEqual(asset_tree_result, asset_tree)
+        self.assertDictEqual(asset_tree, asset_tree_expected)
 
         self.assertDictEqual(
-            filter_dictionary(asset_tree_result, {'type': 'OBJECT'}),
-            filter_dictionary(asset_tree, {'type': 'OBJECT'}))
+            filter_dictionary(asset_tree, {'type': 'OBJECT'}),
+            filter_dictionary(asset_tree_expected, {'type': 'OBJECT'})
+        )
 
 
 class TestUUID(unittest.TestCase):
@@ -239,8 +241,8 @@ class TestUUID(unittest.TestCase):
             (20, 250, 180, 31, 232, 245),
         )
 
-        uuid_result = '7ad4efc5-64a3-4bf8-b542-14fab41fe8f5'
-        self.assertEqual(uuid, uuid_result)
+        uuid_expected = '7ad4efc5-64a3-4bf8-b542-14fab41fe8f5'
+        self.assertEqual(uuid, uuid_expected)
 
     def test_uuid_b(self):
         """
@@ -255,8 +257,8 @@ class TestUUID(unittest.TestCase):
             (172, 242, 45, 9, 34, 66),
         )
 
-        uuid_result = '540cf355-1f08-4b71-909c-acf22d092242'
-        self.assertEqual(uuid, uuid_result)
+        uuid_expected = '540cf355-1f08-4b71-909c-acf22d092242'
+        self.assertEqual(uuid, uuid_expected)
 
     def test_uuid_c(self):
         """
@@ -271,13 +273,14 @@ class TestUUID(unittest.TestCase):
             (96, 75, 126, 122, 145, 201),
         )
 
-        uuid_result = 'd3089eca-07d4-4581-81f3-604b7e7a91c9'
-        self.assertEqual(uuid, uuid_result)
+        uuid_expected = 'd3089eca-07d4-4581-81f3-604b7e7a91c9'
+        self.assertEqual(uuid, uuid_expected)
 
     def test_uuid_d(self):
         from asset_integration import blendfile
 
         blend_filepath = str(ASSETS_PATH / 'Furniture' / 'furniture.blend')
+        uuid_expected = '7ad4efc5-64a3-4bf8-b542-14fab41fe8f5'
 
         with blendfile.open_blend(blend_filepath) as bf:
             objects = bf.find_blocks_from_code(b'OB')
@@ -292,4 +295,4 @@ class TestUUID(unittest.TestCase):
                     continue
 
                 uuid = get_uuid_from_asset_data(asset_data)
-                self.assertEqual(uuid, "7ad4efc5-64a3-4bf8-b542-14fab41fe8f5")
+                self.assertEqual(uuid, uuid_expected)
