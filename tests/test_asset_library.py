@@ -9,12 +9,6 @@ from asset_integration import (
 )
 import unittest
 
-from .mock.bpy import MockOperator
-
-
-import bpy.types
-bpy.types.Operator = MockOperator
-
 
 def test_version():
     assert __version__ == '0.1.0'
