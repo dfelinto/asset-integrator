@@ -86,18 +86,14 @@ e272791e-c4a8-4e8a-b20b-7adc6e97af48:Mesh/Parametric:Mesh-Parametric
 class TestCompleteFile(unittest.TestCase):
     def test_furniture_file(self):
         filepath = str(ASSETS_PATH / 'Furniture')
+        blend_filepath = str(ASSETS_PATH / 'Furniture' / 'furniture.blend')
         asset_tree = get_data_from_library(filepath)
 
         asset_tree_result = {
             'Furniture': {
                 'Chair': {
-                    'filepath': 'Furniture/furniture.blend',
+                    'filepath': blend_filepath,
                     'type': 'OBJECT',
-                    'description': '',
-                },
-                'Table': {
-                    'filepath': 'Furniture/furniture.blend',
-                    'type': 'COLLECTION',
                     'description': '',
                 },
             },
