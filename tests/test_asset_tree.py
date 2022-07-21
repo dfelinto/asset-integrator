@@ -8,11 +8,17 @@ from asset_integration.asset_tree import (
 )
 
 from asset_integration.asset_library import (
-    ASSETS_PATH,
     filter_dictionary,
 )
 
-import os, tempfile
+
+import tempfile
+import pathlib
+
+
+BASE_PATH = pathlib.Path(__file__).parent.absolute()
+ASSETS_PATH = BASE_PATH / ".." / "asset_integration" / "asset_libraries"
+
 
 class TestCatalogParser(unittest.TestCase):
     def test_catalog_a(self):
@@ -34,7 +40,7 @@ VERSION 1
             catalog_read(file.name, catalog_tree, catalog_lookup)
 
             catalog_tree_result = {
-                'Furniture':{},
+                'Furniture': {},
             }
 
             catalog_lookup_result = {
@@ -43,7 +49,6 @@ VERSION 1
 
             self.assertDictEqual(catalog_tree_result, catalog_tree_result)
             self.assertDictEqual(catalog_tree_result, catalog_tree_result)
-
 
     def test_catalog_b(self):
         with tempfile.NamedTemporaryFile(mode='w') as file:
@@ -70,7 +75,7 @@ e272791e-c4a8-4e8a-b20b-7adc6e97af48:Mesh/Parametric:Mesh-Parametric
                     {
                         'Parametric': {},
                     },
-                'Furniture':{},
+                'Furniture': {},
             }
 
             catalog_lookup_result = {
@@ -109,7 +114,8 @@ class TestCompleteFile(unittest.TestCase):
 
     def test_basemesh_file(self):
         filepath = str(ASSETS_PATH / 'Human Basemeshes')
-        blend_filepath = str(ASSETS_PATH / 'Human Basemeshes' / 'human_base_meshes.blend')
+        blend_filepath = str(
+            ASSETS_PATH / 'Human Basemeshes' / 'human_base_meshes.blend')
         asset_tree = get_data_from_library(filepath)
 
         asset_tree_result = {
@@ -164,11 +170,10 @@ class TestCompleteFile(unittest.TestCase):
             filter_dictionary(asset_tree_result, {'type': 'OBJECT'}),
             filter_dictionary(asset_tree, {'type': 'OBJECT'}))
 
-
-
     def test_parametric_primitives_file(self):
         filepath = str(ASSETS_PATH / 'Parametric Primitives')
-        blend_filepath = str(ASSETS_PATH / 'Parametric Primitives' / 'Parametric Primitives.blend')
+        blend_filepath = str(
+            ASSETS_PATH / 'Parametric Primitives' / 'Parametric Primitives.blend')
         asset_tree = get_data_from_library(filepath)
 
         asset_tree_result = {

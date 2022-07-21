@@ -6,30 +6,8 @@ from .asset_tree import (
     generate_asset_tree,
 )
 
-import bpy
-import pathlib
-
 import logging
-
 logger = logging.getLogger(__name__)
-
-ASSET_LIBRARY_NAME = "Blender Bundle"
-BASE_PATH = pathlib.Path(__file__).parent.absolute()
-ASSETS_PATH = BASE_PATH / "asset_libraries"
-
-
-def ensure() -> None:
-    """
-    Ensure that the asset library is configured.
-    """
-    prefs = bpy.context.preferences
-    asset_lib = prefs.filepaths.asset_libraries.get(ASSET_LIBRARY_NAME)
-    if not asset_lib:
-        bpy.ops.preferences.asset_library_add()
-        asset_lib = prefs.filepaths.asset_libraries[-1]
-        asset_lib.name = ASSET_LIBRARY_NAME
-
-    asset_lib.path = str(ASSETS_PATH)
 
 
 def is_asset(content: dict) -> bool:
@@ -44,13 +22,6 @@ def is_catalog(content: dict) -> bool:
     Return whether the dictionary is a catalog.
     """
     return not is_asset(content)
-
-
-def get_asset_filepath(truncated_filepath) -> str:
-    """
-    Returns the complete filepath.
-    """
-    return ASSETS_PATH / truncated_filepath
 
 
 all_libraries = {}

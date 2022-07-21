@@ -4,7 +4,6 @@ from unittest.mock import NonCallableMagicMock
 from .asset_library import (
     add_menu_geometry_nodes_get,
     add_menu_objects_collections_get,
-    get_asset_filepath,
     is_catalog,
     is_asset,
     operator_tools_curves_geometry_nodes_get,
@@ -32,12 +31,12 @@ class MenuItem:
 def set_operator_properties(props, name: str, asset: dict):
     if hasattr(props, 'id_name'):
         props.id_name = name
-        props.filepath = str(get_asset_filepath(asset['filepath']))
+        props.filepath = asset['filepath']
         props.description = asset.get('description', '')
 
     else:
         props.node_group_name = name
-        props.asset_file_path = str(get_asset_filepath(asset['filepath']))
+        props.asset_file_path = asset['filepath']
         props.asset_description = asset.get('description', '')
 
 
