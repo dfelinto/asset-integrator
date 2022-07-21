@@ -6,10 +6,11 @@
 
 VERSION 1
 
-7ad4efc5-64a3-4bf8-b542-14fab41fe8f5:Furniture:Furniture
 e5548d39-4190-4ded-926b-22b569efeb45:Delete:Delete
-372d0d4b-154e-40a5-8fe9-6c013c9268c9:Noise:Noise
-f624cf7d-af8c-4abf-81f7-c980922b99d6:Utilities:Utilities
+7ad4efc5-64a3-4bf8-b542-14fab41fe8f5:Furniture:Furniture
 3c9d8457-bd21-4223-a19c-621c1f28c0fe:Mesh:Mesh
 540cf355-1f08-4b71-909c-acf22d092242:Mesh/Human Basemesh:Mesh-Human Basemesh
+d3089eca-07d4-4581-81f3-604b7e7a91c9:Mesh/Human Basemesh/Stylized:Mesh-Human Basemesh-Stylized
 e272791e-c4a8-4e8a-b20b-7adc6e97af48:Mesh/Parametric:Mesh-Parametric
+372d0d4b-154e-40a5-8fe9-6c013c9268c9:Noise:Noise
+f624cf7d-af8c-4abf-81f7-c980922b99d6:Utilities:Utilities

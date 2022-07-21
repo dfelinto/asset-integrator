@@ -89,6 +89,44 @@ e272791e-c4a8-4e8a-b20b-7adc6e97af48:Mesh/Parametric:Mesh-Parametric
             self.assertDictEqual(catalog_tree, catalog_tree_expected)
             self.assertDictEqual(catalog_lookup, catalog_lookup_expected)
 
+    def test_catalog_c(self):
+        with tempfile.NamedTemporaryFile(mode='w') as file:
+            file.write("""
+# This is an Asset Catalog Definition file for Blender.
+#
+# Empty lines and lines starting with `#` will be ignored.
+# The first non-ignored line should be the version indicator.
+# Other lines are of the format "UUID:catalog/path/for/assets:simple catalog name"
+
+VERSION 1
+
+3c9d8457-bd21-4223-a19c-621c1f28c0fe:Mesh:Mesh
+540cf355-1f08-4b71-909c-acf22d092242:Mesh/Human Basemesh:Mesh-Human Basemesh
+d3089eca-07d4-4581-81f3-604b7e7a91c9:Mesh/Human Basemesh/Stylized:Mesh-Human Basemesh-Stylized
+            """)
+
+            catalog_tree = {}
+            catalog_lookup = {}
+            catalog_read(file.name, catalog_tree, catalog_lookup)
+
+            catalog_tree_result = {
+                'Mesh':
+                    {
+                        'Human Basemesh': {
+                            'Stylized': {},
+                        },
+                    },
+            }
+
+            catalog_lookup_result = {
+                '3c9d8457-bd21-4223-a19c-621c1f28c0fe': catalog_tree_result['Mesh'],
+                '540cf355-1f08-4b71-909c-acf22d092242': catalog_tree_result['Mesh']['Human Basemesh'],
+                'd3089eca-07d4-4581-81f3-604b7e7a91c9': catalog_tree_result['Mesh']['Human Basemesh']['Stylized'],
+            }
+
+            self.assertDictEqual(catalog_tree_result, catalog_tree_result)
+            self.assertDictEqual(catalog_tree_result, catalog_tree_result)
+
 
 class TestCompleteFile(unittest.TestCase):
     def test_furniture_file(self):
@@ -145,20 +183,23 @@ class TestCompleteFile(unittest.TestCase):
                         'type': 'OBJECT',
                         'description': '',
                     },
-                    'Stylized Female': {
-                        'filepath': blend_filepath,
-                        'type': 'OBJECT',
-                        'description': '',
-                    },
-                    'Stylized Head': {
-                        'filepath': blend_filepath,
-                        'type': 'OBJECT',
-                        'description': '',
-                    },
-                    'Stylized Male': {
-                        'filepath': blend_filepath,
-                        'type': 'OBJECT',
-                        'description': '',
+                    'Stylized':
+                    {
+                        'Stylized Female': {
+                            'filepath': blend_filepath,
+                            'type': 'OBJECT',
+                            'description': '',
+                        },
+                        'Stylized Head': {
+                            'filepath': blend_filepath,
+                            'type': 'OBJECT',
+                            'description': '',
+                        },
+                        'Stylized Male': {
+                            'filepath': blend_filepath,
+                            'type': 'OBJECT',
+                            'description': '',
+                        },
                     },
                 },
             },
