@@ -109,6 +109,9 @@ class TestCompleteFile(unittest.TestCase):
 
 class TestUUID(unittest.TestCase):
     def test_uuid_a(self):
+        """
+        Simple UUID test
+        """
         # test simply format_uuid()
         uuid = format_uuid(
             2060775365,
@@ -123,6 +126,22 @@ class TestUUID(unittest.TestCase):
         self.assertEqual(uuid, uuid_result)
 
     def test_uuid_b(self):
+        """
+        Test UUID with values with low digit (e.g., 9 in the node)
+        """
+        uuid = format_uuid(
+            1410134869,
+            7944,
+            19313,
+            144,
+            156,
+            (172, 242, 45, 9, 34, 66),
+        )
+
+        uuid_result = '540cf355-1f08-4b71-909c-acf22d092242'
+        self.assertEqual(uuid, uuid_result)
+
+    def test_uuid_c(self):
         from asset_integration import blendfile
 
         blend_filepath = str(ASSETS_PATH / 'Furniture' / 'furniture.blend')

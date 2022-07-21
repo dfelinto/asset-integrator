@@ -124,7 +124,7 @@ def format_uuid(
     """
     Format UUID based on BLI_uuid_format
     """
-    uuid = "%8x-%4hx-%4hx-%2hx%2hx-%2hx%2hx%2hx%2hx%2hx%2hx" % (
+    uuid = "%8x-%4hx-%4hx-%02hx%02hx-%02hx%02hx%02hx%02hx%02hx%02hx" % (
         time_low,
         time_mid,
         time_hi_and_version,
