@@ -79,6 +79,43 @@ def get_data_from_library(library_path: str) -> dict:
     return asset_tree
 
 
+def get_data_from_blendfile(filepath: str, asset_tree: dict, catalogs_lookup: dict):
+    from . import blendfile
+    catalog_unassigned = asset_tree.get(UNASSIGNED)
+
+    with blendfile.open_blend(filepath) as bf:
+        objects = bf.find_blocks_from_code(b'OB')
+        for ob in objects:
+            asset_data = ob.get_pointer((b'id', b'asset_data'))
+
+            if not asset_data:
+                continue
+
+            ob_name = ob.get((b'id', b'name'))[2:]
+            catalog_name = asset_data.get(b'catalog_simple_name')
+            # TODO get proper description
+            description = '' # asset_data.get_pointer(b'description')
+            uuid = get_uuid_from_object(ob)
+            # print('ob_name', ob_name)
+            # print("UUID", uuid)
+
+            catalog = catalogs_lookup.get(uuid, catalog_unassigned)
+            catalog[ob_name] : {
+                'filepath': filepath,
+                'description': description,
+                'type': 'OBJECT',
+            }
+
+        nodes = bf.find_blocks_from_code(b'NT')
+        for node in nodes:
+            asset_data = node.get_pointer((b'id', b'asset_data'))
+
+            if not asset_data:
+                continue
+
+            # TODO: do nodes too
+
+
 def format_uuid(
     time_low,
     time_mid,
@@ -124,40 +161,3 @@ def get_uuid_from_object(ob)-> str:
         node
         )
     return uuid
-
-
-def get_data_from_blendfile(filepath: str, asset_tree: dict, catalogs_lookup: dict):
-    from . import blendfile
-    catalog_unassigned = asset_tree.get(UNASSIGNED)
-
-    with blendfile.open_blend(filepath) as bf:
-        objects = bf.find_blocks_from_code(b'OB')
-        for ob in objects:
-            asset_data = ob.get_pointer((b'id', b'asset_data'))
-
-            if not asset_data:
-                continue
-
-            ob_name = ob.get((b'id', b'name'))[2:]
-            catalog_name = asset_data.get(b'catalog_simple_name')
-            # TODO get proper description
-            description = '' # asset_data.get_pointer(b'description')
-            uuid = get_uuid_from_object(ob)
-            print("UUID", uuid)
-            print('lookup', catalogs_lookup)
-
-            catalog = catalogs_lookup.get(uuid, catalog_unassigned)
-            catalog[ob_name] : {
-                'filepath': filepath,
-                'description': description,
-                'type': 'OBJECT',
-            }
-
-        nodes = bf.find_blocks_from_code(b'NT')
-        for node in nodes:
-            asset_data = node.get_pointer((b'id', b'asset_data'))
-
-            if not asset_data:
-                continue
-
-            # TODO: do nodes too
