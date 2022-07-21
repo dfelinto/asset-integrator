@@ -4,7 +4,7 @@ from asset_integration.asset_tree import (
     catalog_read,
     format_uuid,
     get_data_from_library,
-    get_uuid_from_object,
+    get_uuid_from_asset_data,
 )
 
 from asset_integration.asset_library import (
@@ -110,7 +110,17 @@ class TestCompleteFile(unittest.TestCase):
 class TestUUID(unittest.TestCase):
     def test_uuid_a(self):
         # test simply format_uuid()
-        pass
+        uuid = format_uuid(
+            2060775365,
+            25763,
+            19448,
+            181,
+            66,
+            (20, 250, 180, 31, 232, 245),
+        )
+
+        uuid_result = '7ad4efc5-64a3-4bf8-b542-14fab41fe8f5'
+        self.assertEqual(uuid, uuid_result)
 
     def test_uuid_b(self):
         from asset_integration import blendfile
@@ -129,5 +139,5 @@ class TestUUID(unittest.TestCase):
                 if ob_name != 'Chair':
                     continue
 
-                uuid = get_uuid_from_object(ob)
+                uuid = get_uuid_from_asset_data(asset_data)
                 self.assertEqual(uuid, "7ad4efc5-64a3-4bf8-b542-14fab41fe8f5")
