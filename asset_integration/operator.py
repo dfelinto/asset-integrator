@@ -32,13 +32,14 @@ class OBJECT_OT_add_asset_object(bpy.types.Operator, add_asset):
         )
 
         ob = context.view_layer.objects.selected[0]
+        ob.asset_clear()
         context.view_layer.objects.active = ob
         # We preserve the scale, but reset all the other parameters
         # Similar to how we do when dragging from the asset browser
         ob.location = context.scene.cursor.location
         ob.rotation_euler = (0, 0, 0)
         ob.rotation_quaternion = (1, 0, 0, 0)
-        ob.axis_angle = (0, 0, 1, 0)
+        ob.rotation_axis_angle = (0, 0, 1, 0)
 
         return {'FINISHED'}
 
