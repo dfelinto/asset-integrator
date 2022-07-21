@@ -158,8 +158,59 @@ class TestCompleteFile(unittest.TestCase):
             }
         }
 
-        print('asset_tree', asset_tree)
-        print('asset_tree_result', asset_tree_result)
+        self.assertDictEqual(asset_tree_result, asset_tree)
+
+        self.assertDictEqual(
+            filter_dictionary(asset_tree_result, {'type': 'OBJECT'}),
+            filter_dictionary(asset_tree, {'type': 'OBJECT'}))
+
+
+
+    def test_parametric_primitives_file(self):
+        filepath = str(ASSETS_PATH / 'Parametric Primitives')
+        blend_filepath = str(ASSETS_PATH / 'Parametric Primitives' / 'Parametric Primitives.blend')
+        asset_tree = get_data_from_library(filepath)
+
+        asset_tree_result = {
+            'Mesh':
+            {
+                'Parametric': {
+                    'Cone': {
+                        'filepath': "Parametric Primitives/Parametric Primitives.blend",
+                        'type': 'OBJECT',
+                        'description': ''
+                    },
+                    'Cube': {
+                        'filepath': "Parametric Primitives/Parametric Primitives.blend",
+                        'type': 'OBJECT',
+                        'description': ''
+
+                    },
+                    'Cylinder': {
+                        'filepath': "Parametric Primitives/Parametric Primitives.blend",
+                        'type': 'OBJECT',
+                        'description': ''
+                    },
+                    'Grid': {
+                        'filepath': "Parametric Primitives/Parametric Primitives.blend",
+                        'type': 'OBJECT',
+                        'description': ''
+                    },
+                    'Icosphere': {
+                        'filepath': "Parametric Primitives/Parametric Primitives.blend",
+                        'type': 'OBJECT',
+                        'description': ''
+                    },
+                    'UV Sphere': {
+                        'filepath': "Parametric Primitives/Parametric Primitives.blend",
+                        'type': 'OBJECT',
+                        'description': ''
+                    },
+                },
+            },
+            'Unassigned': {
+            }
+        }
 
         self.assertDictEqual(asset_tree_result, asset_tree)
 
