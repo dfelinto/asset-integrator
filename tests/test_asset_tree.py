@@ -101,7 +101,7 @@ class TestCompleteFile(unittest.TestCase):
                 'Chair': {
                     'filepath': blend_filepath,
                     'type': 'OBJECT',
-                    'description': '',
+                    'description': 'Object to sit on',
                 },
             },
             'Unassigned': {
@@ -186,33 +186,33 @@ class TestCompleteFile(unittest.TestCase):
                     'Cone': {
                         'filepath': blend_filepath,
                         'type': 'OBJECT',
-                        'description': ''
+                        'description': 'Add a cone, edit it in the modifier'
                     },
                     'Cube': {
                         'filepath': blend_filepath,
                         'type': 'OBJECT',
-                        'description': ''
+                        'description': 'Add a cube, edit it in the modifier'
 
                     },
                     'Cylinder': {
                         'filepath': blend_filepath,
                         'type': 'OBJECT',
-                        'description': ''
+                        'description': 'Add a cylinder, edit it in the modifier'
                     },
                     'Grid': {
                         'filepath': blend_filepath,
                         'type': 'OBJECT',
-                        'description': ''
+                        'description': 'Add a grid, edit it in the modifier'
                     },
                     'Icosphere': {
                         'filepath': blend_filepath,
                         'type': 'OBJECT',
-                        'description': ''
+                        'description': 'Add an icosphere, edit it in the modifier'
                     },
                     'UV Sphere': {
                         'filepath': blend_filepath,
                         'type': 'OBJECT',
-                        'description': ''
+                        'description': 'Add a uv sphere, edit it in the modifier'
                     },
                 },
             },

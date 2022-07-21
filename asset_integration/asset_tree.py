@@ -102,8 +102,9 @@ def get_data_from_blendfile(filepath: str, asset_tree: dict, catalogs_lookup: di
                 continue
 
             ob_name = ob.get((b'id', b'name'))[2:]
-            # TODO get proper description
-            description = ''  # asset_data.get_pointer(b'description')
+            description_ptr = asset_data.get_pointer(b'description')
+            description = description_ptr.get_raw_data(
+                b'char') if description_ptr else ""
             uuid = get_uuid_from_asset_data(asset_data)
 
             catalog = catalogs_lookup.get(uuid, catalog_unassigned)
@@ -125,8 +126,9 @@ def get_data_from_blendfile(filepath: str, asset_tree: dict, catalogs_lookup: di
                 continue
 
             node_tree_name = node_tree.get((b'id', b'name'))[2:]
-            # TODO get proper description
-            description = ''  # asset_data.get_pointer(b'description')
+            description_ptr = asset_data.get_pointer(b'description')
+            description = description_ptr.get_raw_data(
+                b'char') if description_ptr else ""
             uuid = get_uuid_from_asset_data(asset_data)
 
             catalog = catalogs_lookup.get(uuid, catalog_unassigned)
