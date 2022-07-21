@@ -100,7 +100,7 @@ def get_data_from_blendfile(filepath: str, asset_tree: dict, catalogs_lookup: di
             # print("UUID", uuid)
 
             catalog = catalogs_lookup.get(uuid, catalog_unassigned)
-            catalog[ob_name] : {
+            catalog[ob_name] = {
                 'filepath': filepath,
                 'description': description,
                 'type': 'OBJECT',
