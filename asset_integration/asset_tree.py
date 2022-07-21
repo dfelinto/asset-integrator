@@ -140,13 +140,35 @@ def format_uuid(
     return uuid
 
 
+def uint_32_t(value):
+    """
+    Workaround for blendfile bug
+
+    https://developer.blender.org/D15508#420325
+    """
+    if value < -1:
+        return value + 2**32
+    return value
+
+
+def uint_16_t(value):
+    """
+    Workaround for blendfile bug
+
+    Note: unlike the uint_32_t I'm not sure this one is needed.
+    """
+    if value < -1:
+        return value + 2**16
+    return value
+
+
 def get_uuid_from_asset_data(asset_data)-> str:
     """
     Get UUID from object in blendfile
     """
-    time_low = asset_data.get((b'catalog_id', b'time_low'))
-    time_mid = asset_data.get((b'catalog_id', b'time_mid'))
-    time_hi_and_version = asset_data.get((b'catalog_id', b'time_hi_and_version'))
+    time_low = uint_32_t(asset_data.get((b'catalog_id', b'time_low')))
+    time_mid = uint_16_t(asset_data.get((b'catalog_id', b'time_mid')))
+    time_hi_and_version = uint_16_t(asset_data.get((b'catalog_id', b'time_hi_and_version')))
     clock_seq_hi_and_reserved = asset_data.get((b'catalog_id', b'clock_seq_hi_and_reserved'))
     clock_seq_low = asset_data.get((b'catalog_id', b'clock_seq_low'))
     node = asset_data.get((b'catalog_id', b'node'))
