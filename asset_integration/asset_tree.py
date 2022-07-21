@@ -83,6 +83,15 @@ def get_data_from_blendfile(filepath: str, asset_tree: dict, catalogs_lookup: di
     from . import blendfile
     catalog_unassigned = asset_tree.get(UNASSIGNED)
 
+    node_tree_types = {
+        -2: 'UNDEFINED', # NTREE_UNDEFINED
+        -1: 'CUSTOM', # NTREE_CUSTOM
+        0: 'SHADER', # NTREE_SHADER
+        1: 'COMPOSITING', # NTREE_COMPOSIT
+        2: 'TEXTURE', # NTREE_TEXTURE
+        3: 'GEOMETRY_NODES', # NTREE_GEOMETRY
+    }
+
     with blendfile.open_blend(filepath) as bf:
         objects = bf.find_blocks_from_code(b'OB')
         for ob in objects:
@@ -92,7 +101,6 @@ def get_data_from_blendfile(filepath: str, asset_tree: dict, catalogs_lookup: di
                 continue
 
             ob_name = ob.get((b'id', b'name'))[2:]
-            catalog_name = asset_data.get(b'catalog_simple_name')
             # TODO get proper description
             description = '' # asset_data.get_pointer(b'description')
             uuid = get_uuid_from_asset_data(asset_data)
@@ -104,14 +112,42 @@ def get_data_from_blendfile(filepath: str, asset_tree: dict, catalogs_lookup: di
                 'type': 'OBJECT',
             }
 
-        nodes = bf.find_blocks_from_code(b'NT')
-        for node in nodes:
-            asset_data = node.get_pointer((b'id', b'asset_data'))
+        node_trees = bf.find_blocks_from_code(b'NT')
+        for node_tree in node_trees:
+            asset_data = node_tree.get_pointer((b'id', b'asset_data'))
 
             if not asset_data:
                 continue
 
-            # TODO: do nodes too
+            node_tree_type = node_tree.get(b'type')
+            if node_tree_type != 3: #GEOMETRY
+                continue
+
+            node_tree_name = node_tree.get((b'id', b'name'))[2:]
+            # TODO get proper description
+            description = '' # asset_data.get_pointer(b'description')
+            uuid = get_uuid_from_asset_data(asset_data)
+
+            catalog = catalogs_lookup.get(uuid, catalog_unassigned)
+
+            catalog[node_tree_name] = {
+                'filepath': filepath,
+                'description': description,
+                'type': 'NODE_TREE',
+                'subtype': node_tree_types[node_tree_type],
+            }
+            if node_tree_types[node_tree_type] == 'GEOMETRY_NODES':
+                # TODO: handle tags to get poll
+                # For now consider all of the them to be both node and operator
+                is_node = True
+                is_operator = True
+
+                catalog[node_tree_name].update(
+                    {
+                    'is_node': is_node,
+                    'is_operator': is_operator,
+                    }
+                )
 
 
 def format_uuid(
