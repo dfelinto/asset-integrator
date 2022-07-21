@@ -53,7 +53,7 @@ def catalog_read(filepath: str, catalog_tree: dict, lookup: dict):
             catalog_parent = catalog_tree
             for catalog_name in catalog_parts:
                 catalog = catalog_parent.get(catalog_name)
-                if catalog:
+                if catalog is not None:
                     pass
                 else:
                     lookup[uuid] = catalog = catalog_parent[catalog_name] = {}
