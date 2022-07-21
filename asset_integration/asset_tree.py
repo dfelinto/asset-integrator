@@ -73,25 +73,23 @@ def get_data_from_library(filepath: str) -> dict:
             if name.endswith('.blend'):
                 blendfiles.append(os.path.join(path, name))
 
-    blend_data_array = []
     for blend_filepath in blendfiles:
-        blend_data = get_data_from_blendfile(blend_filepath, asset_tree, catalogs_lookup)
-        blend_data_array.append(blend_data)
+        get_data_from_blendfile(blend_filepath, asset_tree, catalogs_lookup)
 
-    return asset_library.merge_asset_libraries(blend_data_array)
+    return asset_tree
 
 
-def get_uuid(ob)-> str:
+def format_uuid(
+    time_low,
+    time_mid,
+    time_hi_and_version,
+    clock_seq_hi_and_reserved,
+    clock_seq_low,
+    time_mid,
+    node: list) -> str:
     """
     Format UUID based on BLI_uuid_format
     """
-    time_low = ob.get((b'id', b'asset_data', b'catalog_id', b'time_low'))
-    time_mid = ob.get((b'id', b'asset_data', b'catalog_id', b'time_mid'))
-    time_hi_and_version = ob.get((b'id', b'asset_data', b'catalog_id', b'time_hi_and_version'))
-    clock_seq_hi_and_reserved = ob.get((b'id', b'asset_data', b'catalog_id', b'clock_seq_hi_and_reserved'))
-    clock_seq_low = ob.get((b'id', b'asset_data', b'catalog_id', b'clock_seq_low'))
-    time_mid = ob.get((b'id', b'asset_data', b'catalog_id', b'time_mid'))
-    node = ob.get((b'id', b'asset_data', b'catalog_id', b'node'))
     uuid = "%8x-%4hx-%4hx-%2hx%2hx-%2hx%2hx%2hx%2hx%2hx%2hx" % (
         time_low,
         time_mid,
@@ -108,11 +106,32 @@ def get_uuid(ob)-> str:
     return uuid
 
 
-def get_data_from_blendfile(filepath: str, asset_tree: dict, catalogs_lookup: dict) -> dict:
+def get_uuid_from_object(ob)-> str:
+    """
+    Get UUID from object in blendfile
+    """
+    time_low = ob.get((b'id', b'asset_data', b'catalog_id', b'time_low'))
+    time_mid = ob.get((b'id', b'asset_data', b'catalog_id', b'time_mid'))
+    time_hi_and_version = ob.get((b'id', b'asset_data', b'catalog_id', b'time_hi_and_version'))
+    clock_seq_hi_and_reserved = ob.get((b'id', b'asset_data', b'catalog_id', b'clock_seq_hi_and_reserved'))
+    clock_seq_low = ob.get((b'id', b'asset_data', b'catalog_id', b'clock_seq_low'))
+    time_mid = ob.get((b'id', b'asset_data', b'catalog_id', b'time_mid'))
+    node = ob.get((b'id', b'asset_data', b'catalog_id', b'node'))
+    uuid = format_uuid(
+        time_low,
+        time_mid,
+        time_hi_and_version,
+        clock_seq_hi_and_reserved,
+        clock_seq_low,
+        node
+        )
+    return uuid
+
+
+def get_data_from_blendfile(filepath: str, asset_tree: dict, catalogs_lookup: dict):
     from . import blendfile
     catalog_unassigned = asset_tree.get(UNASSIGNED)
 
-    data = {}
     with blendfile.open_blend(filepath) as bf:
         objects = bf.find_blocks_from_code(b'OB')
         for ob in objects:
@@ -125,7 +144,9 @@ def get_data_from_blendfile(filepath: str, asset_tree: dict, catalogs_lookup: di
             catalog_name = asset_data.get(b'catalog_simple_name')
             # TODO get proper description
             description = '' # asset_data.get_pointer(b'description')
-            uuid = get_uuid(ob)
+            uuid = get_uuid_from_object(ob)
+            print("UUID", uuid)
+            print('lookup', catalogs_lookup)
 
             catalog = catalogs_lookup.get(uuid, catalog_unassigned)
             catalog[ob_name] : {
@@ -142,5 +163,3 @@ def get_data_from_blendfile(filepath: str, asset_tree: dict, catalogs_lookup: di
                 continue
 
             # TODO: do nodes too
-
-    return {}

@@ -2,11 +2,14 @@ import unittest
 
 from asset_integration.asset_tree import (
     catalog_read,
+    format_uuid,
     get_data_from_library,
+    get_uuid_from_object,
 )
 
 from asset_integration.asset_library import (
     ASSETS_PATH,
+    filter_dictionary,
 )
 
 import os, tempfile
@@ -80,7 +83,7 @@ e272791e-c4a8-4e8a-b20b-7adc6e97af48:Mesh/Parametric:Mesh-Parametric
             self.assertDictEqual(catalog_tree_result, catalog_tree_result)
 
 
-class TestAssetLibrary(unittest.TestCase):
+class TestCompleteFile(unittest.TestCase):
     def test_furniture_file(self):
         filepath = str(ASSETS_PATH / 'Furniture')
         asset_tree = get_data_from_library(filepath)
@@ -98,5 +101,38 @@ class TestAssetLibrary(unittest.TestCase):
                     'description': '',
                 },
             },
+            'Unassigned': {
+            }
         }
+
         self.assertDictEqual(asset_tree_result, asset_tree)
+
+        self.assertDictEqual(
+            filter_dictionary(asset_tree_result, {'type': 'OBJECT'}),
+            filter_dictionary(asset_tree, {'type': 'OBJECT'}))
+
+class TestUUID(unittest.TestCase):
+    def uuid_a(self):
+        # test simply format_uuid()
+        pass
+
+    def uuid_b(self):
+        from asset_integration import blendfile
+
+        filepath = str(ASSETS_PATH / 'Furniture' / 'furniture.blend' )
+        asset_tree = get_data_from_library(filepath)
+
+        with blendfile.open_blend(filepath) as bf:
+            objects = bf.find_blocks_from_code(b'OB')
+            for ob in objects:
+                asset_data = ob.get_pointer((b'id', b'asset_data'))
+
+                if not asset_data:
+                    continue
+
+                ob_name = ob.get((b'id', b'name'))[2:]
+                if ob_name != 'Chair':
+                    continue
+
+                uuid = get_uuid_from_object(ob)
+                self.assertEqual(uuid, "7ad4efc5-64a3-4bf8-b542-14fab41fe8f5")
