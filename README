@@ -21,7 +21,10 @@ https://developer.blender.org/D15493
 
 ---------------------------------------
 
-Sample files for testing:
-* tests/asset_libraries
+Test Files
+==========
 
-Add the individual folders as Asset Libraries in your Blender.
+You can get sample files for testing on `sample_asset_libraries`.
+
+You can add the entire folder as a single Asset Library, or each of
+the individual folders separately.
