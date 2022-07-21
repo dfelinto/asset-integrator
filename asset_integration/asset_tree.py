@@ -85,7 +85,6 @@ def format_uuid(
     time_hi_and_version,
     clock_seq_hi_and_reserved,
     clock_seq_low,
-    time_mid,
     node: list) -> str:
     """
     Format UUID based on BLI_uuid_format
@@ -115,7 +114,6 @@ def get_uuid_from_object(ob)-> str:
     time_hi_and_version = ob.get((b'id', b'asset_data', b'catalog_id', b'time_hi_and_version'))
     clock_seq_hi_and_reserved = ob.get((b'id', b'asset_data', b'catalog_id', b'clock_seq_hi_and_reserved'))
     clock_seq_low = ob.get((b'id', b'asset_data', b'catalog_id', b'clock_seq_low'))
-    time_mid = ob.get((b'id', b'asset_data', b'catalog_id', b'time_mid'))
     node = ob.get((b'id', b'asset_data', b'catalog_id', b'node'))
     uuid = format_uuid(
         time_low,
