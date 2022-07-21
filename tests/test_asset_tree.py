@@ -34,6 +34,7 @@ VERSION 1
 
 7ad4efc5-64a3-4bf8-b542-14fab41fe8f5:Furniture:Furniture
             """)
+            file.flush()
 
             catalog_tree = {}
             catalog_lookup = {}
@@ -65,6 +66,7 @@ VERSION 1
 e272791e-c4a8-4e8a-b20b-7adc6e97af48:Mesh/Parametric:Mesh-Parametric
 7ad4efc5-64a3-4bf8-b542-14fab41fe8f5:Furniture:Furniture
             """)
+            file.flush()
 
             catalog_tree = {}
             catalog_lookup = {}
